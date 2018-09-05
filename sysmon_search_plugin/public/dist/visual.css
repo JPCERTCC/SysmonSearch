@@ -1,0 +1,72 @@
+.square {
+   width: 16px;
+   height: 16px;
+   float: left;
+}
+
+#square0 {
+   background: #87CEFA;
+}
+
+#square1 {
+   background: #FFDEAD;
+}
+
+#square2 {
+   background: #7B68EE;
+}
+
+#square3 {
+   background: #8FBC8F;
+}
+
+#square4 {
+   background: #FF3366;
+}
+
+#square5 {
+   background: #33FFFF;
+}
+
+#square6 {
+   background: #666699;
+}
+
+#square7 {
+   background: #00FA9A;
+}
+
+#square8 {
+   background: #FF00FF;
+}
+
+path {  stroke: #fff; }
+.axis {  font: 10px sans-serif; }
+.legend tr{    border-bottom:1px solid grey; }
+.legend tr:first-child{    border-top:1px solid grey; }
+
+.x.axis text{transform: rotateZ(10deg);}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+
+.x.axis path {  display: none; }
+.legend{
+    margin-bottom:30px;
+    display:inline-block;
+    border-collapse: collapse;
+    border-spacing: 0px;
+}
+.legend td{
+    padding:4px 5px;
+    vertical-align:bottom;
+}
+.legendFreq, .legendPerc{
+    align:right;
+    width:20px;
+}

@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Event List</title>
+
+    <style type="text/css">
+        body, html {
+            font-family: sans-serif;
+        }
+
+    </style>
+    <script src="../plugins/sysmon_search_visual/dist/d3.v3.min.js"> </script>
+</head>
+
+<body>
+<div ng-cloak>
+<div id="header">
+<h1 class="h1_logo">SysmonSearch</h1>
+</div>
+<div class="global_Nav">
+<ul id="menu" class="clearfix">
+  <li>
+    <a href="sysmon_search_visual#/alert" class="active">{{ lang["TAB_ALERT"] }}</a>
+  </li>
+  <li>
+    <a href="sysmon_search_visual#/search">{{ lang["TAB_SEARCH"] }}</a>
+  </li>
+  <li>
+    <a href="sysmon_search_visual#/dashboard">{{ lang["TAB_STATISTICS"] }}</a>
+  </li>
+  <li>
+    <a href="sysmon_search_visual#/">{{ lang["TAB_EVENT_LIST"] }}</a>
+  </li>
+</ul>
+</div>
+
+<h2>{{ lang["EVENTSUMMARY_H2"] }}</h2>
+<h2>{{ lang["TARGET_HOSTNAME"] }}:{{ctrl.hostname}}</h2>
+<h2>{{ lang["TARGET_DATE"] }}:{{ctrl.date}}</h2>
+<br />
+
+<div id='piechart'></div>
+<table class="table">
+  <thead>
+    <tr><th>{{ lang["EVENTSUMMARY_TABLE_TYPE"] }}</th><th>{{ lang["EVENTSUMMARY_TABLE_NUM"] }}</th></tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="day_data in ctrl.data">
+      <td title="{{lang.DATA_NAME_EVENTTYPE}}"><div class="square" id='square{{$index}}'></div> {{day_data.type}}</td>
+      <td><a href="sysmon_search_visual#/process_list/{{ctrl.hostname}}/{{day_data.type}}/{{ctrl.date}}/0" title="{{lang.OPEN_PROCESS}}" target="_blank" class="{{display(day_data.type) ? 'btn-abled' : 'btn-disabled'}}">{{day_data.value}}</a></td>
+    </tr>
+    <tr>
+      <td colspan="2"><a href="sysmon_search_visual#/process/{{ctrl.hostname}}/{{ctrl.date}}/0" title="{{lang.OPEN_CORRELATION}}" target="_blank" class="{{ctrl.btnflg ? 'btn-abled' : 'btn-disabled'}}">{{ lang["CORRELATION_H2"] }}</a></td>
+	</tr>
+	</tbody>
+</table>
+</div>
+</body>
+</html>

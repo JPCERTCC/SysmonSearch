@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Detail</title>
+
+    <style type="text/css">
+        body, html {
+            font-family: sans-serif;
+        }
+    </style>
+    <script src="../plugins/sysmon_search_visual/dist/d3.v3.min.js"> </script>
+</head>
+<body>
+<div ng-cloak>
+<div class="container" ng-controller="process_detailController">
+<div id="header">
+<h1 class="h1_logo">SysmonSearch</h1>
+</div>
+<div class="global_Nav">
+<ul id="menu" class="clearfix">
+  <li>
+    <a href="sysmon_search_visual#/alert">{{ lang["TAB_ALERT"] }}</a>
+  </li>
+  <li>
+    <a href="sysmon_search_visual#/search">{{ lang["TAB_SEARCH"] }}</a>
+  </li>
+  <li>
+    <a href="sysmon_search_visual#/dashboard">{{ lang["TAB_STATISTICS"] }}</a>
+  </li>
+  <li>
+    <a href="sysmon_search_visual#/" class="active">{{ lang["TAB_EVENT_LIST"] }}</a>
+  </li>
+</ul>
+</div>
+<div class="main">
+<h2>{{ lang["DETAIL_H2"] }}</h2>
+<h2>{{ lang["TARGET_HOSTNAME"] }}:{{ctrl.hostname}}</h2>
+<h2>{{ lang["TARGET_DATE"] }}:{{ctrl.date}}</h2>
+<h2>{{ lang["TARGET_PROCESS"] }}:{{ctrl.image}}</h2>
+<div class="search_Box">
+<div class="search_Box_Ttl">
+<img src="../plugins/sysmon_search_visual/images/search_icon.png" alt="{{lang.ALT_SEARCHICON}}" width="21" height="20" />
+<label>{{ lang["SEARCHBOX_SEARCH"] }}:</label>
+</div>
+<div class="search_Box_main">
+<label>
+  <input name="keyword" ng-model="keyword" type="text" placeholder="{{lang.SEARCHBOX_PLACEHOLDER_KEYWORD}}" class="search_keyword" ng-keyup="$event.keyCode == 13 ? ctrl.onkeyup(keyword,hash) : null">
+</label>
+<label>
+  <input name="hash" ng-model="hash" type="text" placeholder="{{lang.SEARCHBOX_PLACEHOLDER_HASH}}" class="search_hash" ng-keyup="$event.keyCode == 13 ? ctrl.onkeyup(keyword,hash) : null">
+</label>
+</div>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+	  <th>{{ lang["PROCESS_TABLE_DATE"] }}</th>
+      <th>{{ lang["PROCESS_TABLE_TYPE"] }}</th>
+      <th>{{ lang["PROCESS_TABLE_SOURCE"] }}</th>
+      <th>{{ lang["PROCESS_TABLE_VALUE"] }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="day_data in ctrl.data" class="{{ ctrl.isTarget(day_data._id) ? 'emphasis' : ''}}">
+      <td title="{{lang.DATA_NAME_UTCTIME}}">{{day_data.date}}</td>
+      <td title="{{lang.DATA_NAME_EVENTTYPE}}">{{day_data.type}}</td>
+      <td title="{{lang.DATA_NAME_PROCESS}}">{{day_data.process}}</td>
+      <td><a href="sysmon_search_visual#/process_overview/{{ctrl.hostname}}/{{ctrl.date}}/{{day_data.guid ? day_data.guid : day_data.info.SourceProcessGuid}}" title="{{lang.DATA_NAME_PROCESS}}" target="_blank" class="{{day_data.guid ? 'btn-abled' : day_data.info.SourceProcessGuid ? 'btn-abled' : 'btn-disabled'}}">{{day_data.disp}}</a></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</body>
+</html>

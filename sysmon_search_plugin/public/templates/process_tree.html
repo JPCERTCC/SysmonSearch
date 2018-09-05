@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+<head>
+  <title> process tree </title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <style type="text/css">
+    #mynetwork {
+      width: 1200px;
+      height: 800px;
+      border: 1px solid lightgray;
+    }
+	table th,td {
+	  padding: 10px;
+	}
+	.button {
+    padding: 10px;
+    background: #54c3a5;
+    color: #fff;
+    font-weight: bold;
+    line-height: 1.5em;
+    letter-spacing: 0.15em;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -o-border-radius: 4px;
+    text-align: center;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.29);
+	border: none;
+	}
+	.button:hover {
+    opacity: 0.7;
+    cursor: pointer;
+	}
+  </style>
+    <script src="../plugins/sysmon_search_visual/dist/d3.v3.min.js"> </script>
+</head>
+<body>
+<div ng-cloak>
+<div id="header">
+<h1 class="h1_logo">SysmonSearch</h1>
+</div>
+<div class="global_Nav">
+<ul id="menu" class="clearfix">
+  <li>
+    <a href="sysmon_search_visual#/alert">{{ lang["TAB_ALERT"] }}</a>
+  </li>
+  <li>
+    <a href="sysmon_search_visual#/search">{{ lang["TAB_SEARCH"] }}</a>
+  </li>
+  <li>
+    <a href="sysmon_search_visual#/dashboard">{{ lang["TAB_STATISTICS"] }}</a>
+  </li>
+  <li>
+    <a href="sysmon_search_visual#/" class="active">{{ lang["TAB_EVENT_LIST"] }}</a>
+  </li>
+</ul>
+</div>
+<div class="main">
+<h2>{{ lang["CORRELATION_H2"] }}</h2>
+<h2>{{ lang["TARGET_HOSTNAME"] }}:{{ctrl.hostname}}</h2>
+<h2>{{ lang["TARGET_DATE"] }}:{{ctrl.date}}</h2>
+
+<div class="search_Box">
+  
+<div class="search_Box_Ttl">
+<img src="../plugins/sysmon_search_visual/images/search_icon.png" alt="search_icon" width="21" height="20">
+<label>{{ lang["SEARCHBOX_SEARCH"] }}:</label>
+</div>
+<div class="search_Box_main">
+
+<form ng-submit="submit()" ng-controller="processController">
+<table class="">
+  <tbody>
+    <tr>
+      <th>
+        <span style="font-weight: bold;">{{ lang["EVENT_DETECTIONBOX_AFTER"] }}</span>
+      </th>
+      <td>
+        <input name="start_time" ng-model="start_time" placeholder="{{lang.EVENT_DETECTIONBOX_AFTER}}" class="ng-pristine ng-untouched ng-valid ng-empty" type="time" value="00:01">
+      </td>
+      <th>
+        <span style="font-weight: bold;">{{ lang["EVENT_DETECTIONBOX_BEFORE"] }}</span>
+      </th>
+      <td>
+        <input name="end_time" ng-model="end_time" placeholder="{{lang.EVENT_DETECTIONBOX_BEFORE}}" class="ng-pristine ng-untouched ng-valid ng-empty" type="time" value="23:59">
+      </td>
+      <td>
+      <input value="submit" type="submit" class="button">
+      </td>
+    </tr>
+  </tbody>
+</table>
+</form>
+
+
+<label>
+  <input name="keyword" ng-model="keyword" placeholder="キーワード" class="search_keyword ng-pristine ng-untouched ng-valid ng-empty" ng-keyup="$event.keyCode == 13 ? ctrl.onkeyup(keyword,hash) : null" type="text">
+</label>
+<label>
+  <input name="hash" ng-model="hash" placeholder="HASH" class="search_hash ng-pristine ng-untouched ng-valid ng-empty" ng-keyup="$event.keyCode == 13 ? ctrl.onkeyup(keyword,hash) : null" type="text">
+</label>
+</div>
+</div>
+
+<div id="mynetwork"></div>
+<div id="pos" style="position:absolute; display:none;">test</div>
+</div>
+<p><textarea rows="10" cols="100" id="text" class="detail" readonly placeholder="{{lang.TEXTAREA_PLACEHOLDER}}">
+</textarea></p>
+</div>
+</body>
+</html>

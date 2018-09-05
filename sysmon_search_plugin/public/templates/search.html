@@ -1,0 +1,212 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Event List</title>
+
+    <style type="text/css">
+        body, html {
+            font-family: sans-serif;
+        }
+    </style>
+
+<style>
+table.noBorder_tbl th,td {
+	padding: 10px;
+}
+table.noBorder_tbl th {
+	vertical-align: top;
+}
+.conditions_w373 {
+	width: 373px;
+}
+</style>
+<script src="../plugins/sysmon_search_visual/dist/d3.v3.min.js"> </script>
+</head>
+<body>
+<div ng-cloak>
+<div id="header">
+<h1 class="h1_logo">SysmonSearch</h1>
+</div>
+<div class="global_Nav">
+<ul id="menu" class="clearfix">
+  <li>
+    <a href="sysmon_search_visual#/alert">{{ lang["TAB_ALERT"] }}</a>
+  </li>
+  <li>
+    <a href="sysmon_search_visual#/search" class="active">{{ lang["TAB_SEARCH"] }}</a>
+  </li>
+  <li>
+    <a href="sysmon_search_visual#/dashboard">{{ lang["TAB_STATISTICS"] }}</a>
+  </li>
+  <li>
+    <a href="sysmon_search_visual#/">{{ lang["TAB_EVENT_LIST"] }}</a>
+  </li>
+</ul>
+</div>
+<div class="main">
+<div class="ttlBox01 clearfix">
+<h2 class="flt_l">{{ lang["SEARCH_H2"] }}</h2>
+</div>
+<div class="detectionBox">
+<div class="db_ttl">{{ lang["SEARCH_CRITERIA_SEARCH_FIELD"] }}</div>
+    <div class="db_main clearfix">
+    <table class="noBorder_tbl flt_l clearfix">
+      <tbody>
+        <tr>
+          <th>
+            <span style="font-weight: bold;">{{ lang["SEARCH_CRITERIA_SEARCH_DATE"] }}</span>
+          </th>
+          <td>
+            <input name="start_date" type="date" ng-model="keywords.start_date" ng-change="ctrl.st_dt_chg(keywords)">
+            <input name="start_time" type="time" ng-model="keywords.start_time" list="data1">
+            <span style="margin:0 10px;">～</span>
+            <input name="end_date" type="date" ng-model="keywords.end_date" ng-change="ctrl.ed_dt_chg(keywords)">
+            <input name="end_time" type="time" ng-model="keywords.end_time" list="data1">
+          </td>
+        </tr>
+        <tr>
+          <th rowspan="2">
+            <span style="font-weight: bold;">{{ lang["SEARCH_CRITERIA_SEARCH_FIELD"] }}</span>
+          </th>
+          <td id="search_item_area">
+            <div class="conditions_w373 clearfix" id="search_group_1">
+            <form class="flt_l" style="margin-right: 5px;">
+              <select name="search_item_1" ng-model="keywords.search_item_1">
+                <option value=""></option>
+                <option value="1">{{ lang["SEARCH_PULLDOWN_IPADDRESS"] }}</option>
+                <option value="2">{{ lang["SEARCH_PULLDOWN_PORT"] }}</option>
+                <option value="3">{{ lang["SEARCH_PULLDOWN_HOST"] }}</option>
+                <option value="4">{{ lang["SEARCH_PULLDOWN_PROCESS"] }}</option>
+                <option value="5">{{ lang["SEARCH_PULLDOWN_FILE"] }}</option>
+                <option value="6">{{ lang["SEARCH_PULLDOWN_KEY"] }}</option>
+                <option value="7">{{ lang["SEARCH_PULLDOWN_VALUE"] }}</option>
+                <option value="8">{{ lang["SEARCH_PULLDOWN_HASH"] }}</option>
+              </select>
+            </form>
+            <input name="search_value_1" type="text" class="flt_l" style="margin-right: 5px;" ng-model="keywords.search_value_1">
+            <form class="flt_l">
+              <select name="search_conjunction" ng-model="keywords.search_conjunction" ng-options="option.id as option.name for option in conjunctionList"></select>
+            </form>
+            <span class="flt_r">
+              <a href="" class="addButton" id="add_button_1" ng-click="ctrl.add_field(1)">{{ lang["SEARCH_CRITERIA_ADD_BUTTON"] }}</a>
+            </span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="flt_r">
+        <div class="button" ng-click="ctrl.import()">{{ lang["SEARCH_CRITERIA_IMPORT_BUTTON"] }}</div>
+        <input type="file" id="file-import" style="display:none" file-model="file" />
+        <div class="button" ng-click="ctrl.save_rules(keywords)">{{ lang["SEARCH_CRITERIA_SAVE_RULE＿BUTTON1"] }}<br />{{ lang["SEARCH_CRITERIA_SAVE_RULE＿BUTTON2"] }}</div>
+        <div class="button" ng-click="ctrl.search(keywords)">{{ lang["SEARCH_CRITERIA_SEARCH_BUTTON"] }}</div>
+    </div>
+
+    <div ng-init="keywords = {sort_item: 'event_id', sort_order: 'asc'}"></div>
+    <input type="hidden" name="sort_item" ng-model="keywords.sort_item">
+    <input type="hidden" name="sort_order" ng-model="keywords.sort_order">
+</div>
+<!-- /db_main clearfix -->
+</div>
+<!-- /detectionBox -->
+<div class="detectionBox detectionBox_Result">
+<div class="db_ttl">{{ lang["RESULTBOX_RESULT"] }}</div>
+<div class="db_main clearfix">
+<div class="columSet clearfix">
+<div class="colum05 first">
+<span id="">{{ctrl.total}}</span>
+<span class="item_Name">{{ lang["RESULTBOX_NUMBER_OF_RECORDS"] }}</span>
+</div>
+<div class="colum05">
+<span id="">{{ctrl.unique_host_count}}</span>
+<span class="item_Name">{{ lang["RESULTBOX_UNIQUE_HOSTS"] }}</span>
+</div>
+</div>
+</div>
+
+<div>
+    <table class="table">
+      <thead>
+        <tr>
+            <th><a ng-click="ctrl.sort('event_data.UtcTime.keyword')">UtcTime{{ctrl.utc_time}}</a></th>
+            <th><a ng-click="ctrl.sort('event_id')">EventId{{ctrl.event_id}}</a></th>
+            <th><a ng-click="ctrl.sort('level.keyword')">Level{{ctrl.level}}</a></th>
+            <th><a ng-click="ctrl.sort('computer_name.keyword')">Computer{{ctrl.computer_name}}</a></th>
+            <th><a ng-click="ctrl.sort('event_data.User.keyword')">UserName{{ctrl.user_name}}</a></th>
+            <th><a ng-click="ctrl.sort('event_data.Image.keyword')">Image{{ctrl.image}}</a></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="data in ctrl.search_data">
+          <td title="{{lang.DATA_NAME_UTCTIME}}">{{data.utc_time}}</td>
+          <td title="{{lang.DATA_NAME_EVENTID}}">{{data.event_id}}</td>
+          <td title="{{lang.DATA_NAME_LEVEL}}">{{data.level}}</td>
+          <td title="{{lang.DATA_NAME_COMPUTER}}">
+              {{data.computer_name}}<BR>
+              <a href="sysmon_search_visual#/process_list/{{data.computer_name}}/{{data.decription}}/{{data.utc_time}}/{{data._id}}" title="{{lang.OPEN_PROCESS}}" target="_blank">{{lang.RESULTBOX_LINKNAME_TABLE}}</a>
+              <a href="sysmon_search_visual#/process/{{data.computer_name}}/{{data.utc_time}}/{{data.process_guid ? data.process_guid : data.source_guid ? data.source_guid : 0}}" title="{{lang.OPEN_CORRELATION}}" target="_blank">{{lang.RESULTBOX_LINKNAME_GRAPH}}</a>
+          </td>
+          <td title="{{lang.DATA_NAME_USERNAME}}">{{data.user_name}}</td>
+          <td title="{{lang.DATA_NAME_IMAGE}}"><a href="sysmon_search_visual#/process_overview/{{data.computer_name}}/{{data.date.substring(0,10)}}/{{data.process_guid}}" title="{{lang.OPEN_DETAIL}}" target="_blank" class="{{data.process_guid ? 'btn-abled' : 'btn-disabled'}}">{{data.image}}</a></td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+
+</div>
+</div>
+<!-- /main -->
+</div>
+
+</body>
+</html>
+<datalist id="data1">
+    <option value="00:00"></option>
+    <option value="00:30"></option>
+    <option value="01:00"></option>
+    <option value="01:30"></option>
+    <option value="02:00"></option>
+    <option value="02:30"></option>
+    <option value="03:00"></option>
+    <option value="03:30"></option>
+    <option value="04:00"></option>
+    <option value="04:30"></option>
+    <option value="05:00"></option>
+    <option value="05:30"></option>
+    <option value="06:00"></option>
+    <option value="06:30"></option>
+    <option value="07:00"></option>
+    <option value="07:30"></option>
+    <option value="08:00"></option>
+    <option value="08:30"></option>
+    <option value="09:00"></option>
+    <option value="09:30"></option>
+    <option value="10:00"></option>
+    <option value="10:30"></option>
+    <option value="11:00"></option>
+    <option value="11:30"></option>
+    <option value="12:00"></option>
+    <option value="12:30"></option>
+    <option value="13:00"></option>
+    <option value="13:30"></option>
+    <option value="14:00"></option>
+    <option value="14:30"></option>
+    <option value="15:00"></option>
+    <option value="15:30"></option>
+    <option value="16:00"></option>
+    <option value="16:30"></option>
+    <option value="17:00"></option>
+    <option value="17:30"></option>
+    <option value="18:00"></option>
+    <option value="18:30"></option>
+    <option value="19:00"></option>
+    <option value="19:30"></option>
+    <option value="20:00"></option>
+    <option value="20:30"></option>
+    <option value="21:00"></option>
+    <option value="21:30"></option>
+    <option value="22:00"></option>
+    <option value="22:30"></option>
+    <option value="23:00"></option>
+    <option value="23:30"></option>
+</datalist>

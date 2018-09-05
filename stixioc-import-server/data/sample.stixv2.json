@@ -1,0 +1,73 @@
+{
+  "type": "bundle",
+  "id": "bundle--0bd7aede-1fb7-4168-b782-3fb0a117e943",
+  "spec_version": "2.0",
+  "objects": [
+    {
+      "type": "indicator",
+      "id": "indicator--afc5cb0a-e803-4352-a0ee-acafe4f16690",
+      "created": "2018-02-01T00:00:00.000Z",
+      "modified": "2018-02-01T00:00:00.000Z",
+      "labels": ["sample-activity"],
+      "name": "IP address example",
+      "description": "This is an example of IP address in patterns.",
+      "pattern": "[ ipv4-addr:value = '127.0.0.1' OR ipv6-addr:value = 'deadbeef:deadbeef:deadbeef:deadbeef' ]",
+      "valid_from": "2018-02-01T00:00:00.000Z"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--52a5f48b-a4f2-40e5-9aea-24833a2c117b",
+      "created": "2018-02-01T00:00:00.000Z",
+      "modified": "2018-02-01T00:00:00.000Z",
+      "labels": ["sample-activity"],
+      "name": "Process name example",
+      "description": "This is an example of Process name in patterns.",
+      "pattern": "[ process:name = 'fooproc' ]",
+      "valid_from": "2018-02-01T00:00:00.000Z"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--e72e6491-a319-473c-8d55-4c04af00082b",
+      "created": "2018-02-01T00:00:00.000Z",
+      "modified": "2018-02-01T00:00:00.000Z",
+      "labels": ["sample-activity"],
+      "name": "File name example",
+      "description": "This is an example of File name in patterns.",
+      "pattern": "[ file:name = 'foo.dll' ]",
+      "valid_from": "2018-02-01T00:00:00.000Z"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--fb4d266f-4975-4c9d-9ede-bf3e75655c43",
+      "created": "2018-02-01T00:00:00.000Z",
+      "modified": "2018-02-01T00:00:00.000Z",
+      "labels": ["sample-activity"],
+      "name": "Registry key example",
+      "description": "This is an example of Registry key in patterns.",
+      "pattern": "[ windows-registry-key:key = 'HKEY_LOCAL_MACHINE\\\\System\\\\Foo\\\\Bar' ]",
+      "valid_from": "2018-02-01T00:00:00.000Z"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--abd8bdfd-9c26-427e-b59b-3a446a16e431",
+      "created": "2018-02-01T00:00:00.000Z",
+      "modified": "2018-02-01T00:00:00.000Z",
+      "labels": ["sample-activity"],
+      "name": "Registry value example",
+      "description": "This is an example of Registry value in patterns.",
+      "pattern": "[ windows-registry-key:values[*].data = 'qwerty' ]",
+      "valid_from": "2018-02-01T00:00:00.000Z"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--f195c7ea-e565-41c4-a0c5-5777b2a59fe7",
+      "created": "2018-02-01T00:00:00.000Z",
+      "modified": "2018-02-01T00:00:00.000Z",
+      "labels": ["sample-activity"],
+      "name": "Hash value example",
+      "description": "This is an example of Hash value in patterns.",
+      "pattern": "[ file:hashes.'MD5' = 'f7731ec55c841a9b5ffa6a3c1de50ea2' OR file:hashes.'SHA-1' = '54f42145ff085ce8e39dd14cf2568e34f248ef32' OR file:hashes.'SHA-256' = '1a3c501462412dd9569738c82eaf08f06ba2e65335c09c4a9c854906796b6488' ]",
+      "valid_from": "2018-02-01T00:00:00.000Z"
+    }
+  ]
+}

@@ -1,0 +1,344 @@
+@charset "utf-8";
+/* CSS Document */
+
+body, html {
+	font-family: sans-serif;
+}
+.main h2 {
+	color: #666666;
+  position: relative;
+  padding: 0 0 .15em .75em;
+  border-left: 6px solid #ccc;
+}
+.main h2::before {
+  position: absolute;
+  left: -6px;
+  bottom: 0;
+  content: '';
+  width: 6px;
+  height: 50%;
+  background-color: #666666;
+}
+.flt_l {
+	float: left;
+}
+.flt_r {
+	float: right;
+}
+.clearfix::after{
+  content: "";
+  display: block;
+  clear: both;
+}
+#mynetwork {
+	width: 800px;
+	height: 600px;
+	border: 1px solid lightgray;
+}
+.application {
+  background-color: #EAEAE9;
+}
+/* columSet */
+.columSet {
+	width: 100%;
+}
+.colum05 {
+	width: 48%;
+	float: left;
+	margin-left: 2%;
+}
+.first {
+	margin-left: 0;
+}
+/* header */
+#header {
+	padding: 15px;
+	background: rgb(53,51,63); /* Old browsers */
+	background: -moz-linear-gradient(top, rgba(53,51,63,1) 0%, rgba(73,74,88,1) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, rgba(53,51,63,1) 0%,rgba(73,74,88,1) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, rgba(53,51,63,1) 0%,rgba(73,74,88,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#35333f', endColorstr='#494a58',GradientType=0 ); /* IE6-9 */
+}
+#header .h1_logo {
+	margin: 0;
+	padding: 0;
+	color: #ddd;
+}
+
+#menu {
+  width:100%;
+  padding:0;
+  margin:0;
+  list-style-type: none;
+	background: rgb(255,255,255); /* Old browsers */
+	background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(243,243,243,1) 50%, rgba(219,219,219,1) 51%, rgba(255,255,255,1) 95%, rgba(175,175,175,1) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(243,243,243,1) 50%,rgba(219,219,219,1) 51%,rgba(255,255,255,1) 95%,rgba(175,175,175,1) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(243,243,243,1) 50%,rgba(219,219,219,1) 51%,rgba(255,255,255,1) 95%,rgba(175,175,175,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#afafaf',GradientType=0 ); /* IE6-9 */
+}
+#menu li {
+  min-width: 170px;
+  float:left;
+  padding:0;
+  margin:0;
+  text-align:center;
+}
+#menu li a {
+  width:auto;
+  color:#333;
+  font-size:12px;
+  font-weight:bold;
+  padding:10px 0;
+  text-decoration:none;
+  display:block;
+  border-right:1px solid #444;
+}
+
+#menu li a:hover {
+	color:#ccc;
+  background:#555;
+  background-image: -moz-linear-gradient(top, #555 0%, #444 50%, #333 50%, #444 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #555), color-stop(0.50, #444), color-stop(0.50, #333), color-stop(1, #444));
+  box-shadow: 1px 0px 0px rgba(225,225,225,0) inset,
+			 -1px 0px 0px rgba(225,225,225,0) inset,
+			  0px 1px 1px rgba(0,0,0,0.1) inset,
+			  0px -1px 1px rgba(0,0,0,0.3) inset,
+			  0px 1px 3px #666;
+}
+#menu li a.active {
+	color:#ccc;
+  background:#555;
+  background-image: -moz-linear-gradient(top, #555 0%, #444 50%, #333 50%, #444 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #555), color-stop(0.50, #444), color-stop(0.50, #333), color-stop(1, #444));
+  box-shadow: 1px 0px 0px rgba(225,225,225,0) inset,
+			 -1px 0px 0px rgba(225,225,225,0) inset,
+			  0px 1px 1px rgba(0,0,0,0.1) inset,
+			  0px -1px 1px rgba(0,0,0,0.3) inset,
+			  0px 1px 3px #666;
+}
+#menu li:first-child {
+	margin-left: 15px;
+  border-left:1px solid #444;
+
+}
+.main {
+	padding:15px;
+}
+.ttlBox01 .period {
+	width: 500px;
+}
+.select-period select {
+	margin-top: 20px;
+	margin-bottom: 8px;
+	width: 100%;
+	padding: 10px;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	border: 1px solid #999;
+	background: #eee;
+	background: url(../images/arrow01.png) right 50% no-repeat, -webkit-linear-gradient(top, #fff 0%,#efebe1 100%);
+	background: url(../images/arrow01.png) right 50% no-repeat, linear-gradient(to bottom, #fff 0%,#efebe1 100%);
+	background-size: 20px, 100%;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;/* for Safari and Chrome */
+	-moz-border-radius: 4px; /* for Firefox */
+	-o-border-radius: 4px;/* for opera */
+}
+.search_Box {
+	width: 100%;
+	margin-bottom: 30px;
+}
+.search_Box_Ttl {
+	color: #666;
+	font-weight: bold;
+	padding: .75em 1em;
+  border-bottom: 1px solid #ccc;
+  background: -webkit-linear-gradient(top, #fff 0%, #f0f0f0 100%);
+  background: linear-gradient(to bottom, #fff 0%, #f0f0f0 100%);
+  box-shadow: 0 -1px 0 rgba(255, 255, 255, 1) inset;
+	border-radius: 4px 4px 0 0;
+	-webkit-border-radius: 4px 4px 0 0;/* for Safari and Chrome */
+	-moz-border-radius: 4px 4px 0 0; /* for Firefox */
+	-o-border-radius: 4px 4px 0 0;/* for opera */
+}
+.search_Box_main {
+	padding: 10px;
+	background: #FEFEFE;
+}
+.search_Box_main .search_keyword,
+.search_Box_main .search_hash {
+	padding: 4px;
+	font-size: 12px;
+	line-height: 1.5em;
+	margin-right: 10px;
+}
+.detectionBox {
+	width: 100%;
+	margin-bottom: 15px;
+}
+.detectionBox .db_ttl {
+	color: #666;
+	font-weight: bold;
+	padding: .75em 1em;
+  border-bottom: 1px solid #ccc;
+  background: -webkit-linear-gradient(top, #fff 0%, #f0f0f0 100%);
+  background: linear-gradient(to bottom, #fff 0%, #f0f0f0 100%);
+  box-shadow: 0 -1px 0 rgba(255, 255, 255, 1) inset;
+	border-radius: 4px 4px 0 0;
+	-webkit-border-radius: 4px 4px 0 0;/* for Safari and Chrome */
+	-moz-border-radius: 4px 4px 0 0; /* for Firefox */
+	-o-border-radius: 4px 4px 0 0;/* for opera */
+}
+.detectionBox .db_main {
+	padding: 15px;
+	background: #FEFEFE;
+}
+.db_main span {
+	margin-right: 7px;
+	font-weight: bold;
+}
+.detectionBox .db_main .button {
+	padding: 10px;
+	background: #54c3a5;
+	color: #fff;
+	font-weight: bold;
+	line-height: 1.5em;
+	letter-spacing: 0.15em;
+	border-radius: 4px;
+	-webkit-border-radius: 4px;/* for Safari and Chrome */
+	-moz-border-radius: 4px; /* for Firefox */
+	-o-border-radius: 4px;/* for opera */
+	margin-bottom: 10px;
+	text-align: center;
+	box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.29);
+}
+.detectionBox .db_main .button.gray {
+	background: #ddd;
+	color:#666;
+}
+.detectionBox .db_main .button:hover {
+	opacity: 0.7;
+	cursor: pointer;
+}
+.detectionBox .db_main .button:active {
+    box-shadow: inset 0 0 2px rgba(128, 128, 128, 0.1);
+    transform: translateY(2px);
+}
+.detectionBox .db_main .button img{
+	margin-right: 5px;
+}
+.detectionBox_Result {
+	width: 500px;
+	margin-bottom: 30px;
+}
+.detectionBox_Result .colum05{
+	border-left: solid 1px #666;
+	text-align: center;
+	font-size: 24px;
+}
+.detectionBox_Result .colum05.first{
+	border-left: none;
+}
+.detectionBox_Result .item_Name {
+	display: block;
+	font-size: 14px;
+	color: #666;
+	font-weight: bold;
+}
+.display_Result {
+	padding: 10px;
+	border: solid 1px #ddd;
+}
+table.table {
+	border-collapse: separate;
+	border-spacing: 0;
+	background-color: #fff;
+	border: 1px solid #D9D9D9;
+}
+table.table th {
+	background-color: #F1F1EA;
+}
+table.table th,
+table.table td {
+	border-left: 1px solid #D9D9D9;
+}
+.addButton {
+	display: inline-block;
+	white-space: nowrap;
+	background-color: #ccc;
+	background-image: linear-gradient(to left, #eee, #ccc);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#eeeeee', EndColorStr='#cccccc');
+	border: 1px solid #777;
+	padding: 0 1.5em;
+	margin: 0.5em;
+	font: bold 1em/2em Arial, Helvetica;
+	text-decoration: none;
+	color: #333;
+	text-shadow: 0 1px 0 rgba(255,255,255,.8);
+	border-radius: .2em;
+	box-shadow: 0 0 1px 1px rgba(255,255,255,.8) inset, 0 1px 0 rgba(0,0,0,.3);
+}
+.addButton:hover {
+	color: #333;
+	background-color: #ddd;
+	background-image: linear-gradient(to left, #fafafa, #ddd);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#fafafa', EndColorStr='#dddddd');
+}
+.addButton:active {
+	box-shadow: 0 0 4px 2px rgba(0,0,0,.3) inset;
+	position: relative;
+	top: 1px;
+}
+.addButton:focus {
+	outline: 0;
+	background: #fafafa;
+}
+.addButton:before {
+	background: #ccc;
+	background: rgba(0,0,0,.1);
+	float: left;
+	width: 1em;
+	text-align: center;
+	font-size: 1.5em;
+	margin: 0 1em 0 -1em;
+	box-shadow: 1px 0 0 rgba(0,0,0,.5), 2px 0 0 rgba(255,255,255,.5);
+	border-radius: .15em 0 0 .15em;
+	pointer-events: none;
+}
+/* Hexadecimal entities for the icons */
+
+.addButton:before {
+	content: "\271A";
+}
+.addButton.delButton:before {
+	content: "\2212";
+}
+
+.btn-disabled {
+    pointer-events: none;
+    cursor: default;
+    text-decoration: none;
+    color: #000000;
+}
+
+.non-display {
+    display: none;
+}
+
+[ng-cloak] {
+  display: none !important;
+}
+
+.message {
+    color: red;
+}
+
+tr.emphasis {
+    background-color: rgba(255,155,155,0.9);
+}
+
+textarea.detail  {
+	resize: vertical;
+	width: 1230px;
+}

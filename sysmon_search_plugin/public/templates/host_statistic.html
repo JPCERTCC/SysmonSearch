@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Event List</title>
+
+    <style type="text/css">
+        body, html {
+            font-family: sans-serif;
+        }
+    </style>
+	<style>
+		table.noBorder_tbl th,td {
+			padding: 10px;
+		}
+		table.noBorder_tbl th {
+			vertical-align: top;
+		}
+		.conditions_w373 {
+			width: 373px;
+		}
+	</style>
+    <script src="../plugins/sysmon_search_visual/dist/d3.v3.min.js"> </script>
+</head>
+
+<body>
+<div ng-cloak>
+<div id="header">
+<h1 class="h1_logo">SysmonSearch</h1>
+</div>
+<div class="global_Nav">
+<ul id="menu" class="clearfix">
+  <li>
+    <a href="sysmon_search_visual#/alert">{{ lang["TAB_ALERT"] }}</a>
+  </li>
+  <li>
+    <a href="sysmon_search_visual#/search">{{ lang["TAB_SEARCH"] }}</a>
+  </li>
+  <li>
+    <a href="sysmon_search_visual#/dashboard" class="active">{{ lang["TAB_STATISTICS"] }}</a>
+  </li>
+  <li>
+    <a href="sysmon_search_visual#/">{{ lang["TAB_EVENT_LIST"] }}</a>
+  </li>
+</ul>
+</div>
+<div class="main">
+<div class="ttlBox01 clearfix">
+<h2 class="flt_l">{{ lang["HOSTSTATS_H2"] }}</h2>
+</div>
+
+</div>
+
+<div id="visualization"></div>
+<!--
+<div class="container" ng-controller="statisticController">
+<div id="visualization"></div>
+</div>
+-->
+</div>
+</body>
+</html>
+

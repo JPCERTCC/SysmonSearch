@@ -1,0 +1,13 @@
+{
+    "operator" : "AND",
+    "patterns": [
+        {
+            "key" : "Hash",
+            "value" : "md"
+        },
+        {
+            "key" : "ProcessName",
+            "value" : "net"
+        }
+    ]
+}

@@ -1,0 +1,2 @@
+elasticsearch==6.1.1
+elasticsearch-dsl==6.1.0

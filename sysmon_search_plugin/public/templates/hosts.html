@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Hosts List</title>
+
+<style>
+table.noBorder_tbl th,td {
+    padding: 10px;
+}
+table.noBorder_tbl th {
+    vertical-align: top;
+}
+.conditions_w373 {
+    width: 373px;
+}
+.resultButton {
+    padding: 5px 8px;
+    border: 1px solid #ccc;
+    width: 100px;
+    text-align: center;
+    border-radius: 4px;
+    color: #666;
+    font-weight: bold;
+}
+.resultButton:hover {
+    cursor: pointer;
+    opacity: 0.7;
+    -moz-opacity: 0.7;
+    filter: alpha(opacity=70);
+}
+.resultTable {
+    display: none;
+}
+</style>
+
+    <script src="../plugins/sysmon_search_visual/dist/d3.v3.min.js"> </script>
+    <script src="../plugins/sysmon_search_visual/dist/jquery-3.3.1.min.js"> </script>
+    <script type="text/javascript">
+      $(function(){
+      $('.resultButton').on('click',function(){
+      $(this).toggleClass('opened');
+      $(this).next().slideToggle('fast');
+       });
+      });
+    </script>
+
+</head>
+
+<body>
+<div ng-cloak>
+<div id="header">
+<h1 class="h1_logo">SysmonSearch</h1>
+</div>
+<div class="global_Nav">
+<ul id="menu" class="clearfix">
+  <li>
+    <a href="sysmon_search_visual#/alert">{{ lang["TAB_ALERT"] }}</a>
+  </li>
+  <li>
+    <a href="sysmon_search_visual#/search">{{ lang["TAB_SEARCH"] }}</a>
+  </li>
+  <li>
+    <a href="sysmon_search_visual#/dashboard">{{ lang["TAB_STATISTICS"] }}</a>
+  </li>
+  <li>
+    <a href="sysmon_search_visual#/" class="active">{{ lang["TAB_EVENT_LIST"] }}</a>
+  </li>
+</ul>
+</div>
+
+<div class="main">
+<div class="ttlBox01 clearfix">
+<h2 class="flt_l">{{ lang["EVENT_H2"] }}</h2>
+</div>
+
+<div class="detectionBox">
+<div class="db_ttl">{{ lang["EVENT_DETECTIONBOX_SEARCH_FIELD"] }}</div>
+<div class="db_main clearfix">
+<table class="noBorder_tbl flt_l clearfix">
+  <tbody>
+    <tr>
+      <th>
+        <span style="font-weight: bold;">{{ lang["EVENT_DETECTIONBOX_AFTER"] }}</span>
+      </th>
+      <td>
+        <input name="start_date" ng-model="keywords.start_date" type="date" placeholder="{{lang.EVENT_DETECTIONBOX_AFTER}}" ng-keyup="$event.keyCode == 13 ? ctrl.onkeyup(keywords) : null">
+      </td>
+      <th>
+        <span style="font-weight: bold;">{{ lang["EVENT_DETECTIONBOX_BEFORE"] }}</span>
+      </th>
+      <td>
+        <input name="end_date" ng-model="keywords.end_date" type="date" placeholder="{{lang.EVENT_DETECTIONBOX_BEFORE}}" ng-keyup="$event.keyCode == 13 ? ctrl.onkeyup(keywords) : null">
+      </td>
+    </tr>
+    <tr>
+      <th>
+        <span style="font-weight: bold;">{{ lang["EVENT_DETECTIONBOX_HOSTNAME"] }}</span>
+      </th>
+      <td>
+        <input name="keyword" ng-model="keywords.keyword" type="text" placeholder="{{lang.SEARCHBOX_PLACEHOLDER_HOSTNAME}}" ng-keyup="$event.keyCode == 13 ? ctrl.onkeyup(keywords) : null">
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+<!-- /db_main clearfix -->
+</div>
+<!-- /detectionBox -->
+
+<div class="resultButton">result</div>
+    <table class="table resultTable">
+  <thead>
+    <tr><th>{{ lang["EVENT_TABLE_DATE"] }}</th><th>{{ lang["EVENT_TABLE_HOSTNAME"] }}</th><th>{{ lang["EVENT_TABLE_EVENTNUM"] }}</th></tr>
+  </thead>
+  <tbody ng-repeat="day_data in ctrl.daily_hosts">
+    <tr ng-repeat="item in day_data.result">
+      <td ng-if="$first" rowspan="{{day_data.result.length}}">{{day_data.date}}</td>
+      <td>
+        <a href="sysmon_search_visual#/host_statistic/{{item.key}}/{{day_data.date}}" title="{{lang.OPEN_HOSTSTAS}}" target=”_blank”>{{item.key}}</a>
+	  </td><td>
+        <a href="sysmon_search_visual#/event/{{item.key}}/{{day_data.date}}" title="{{lang.OPEN_EVENTSUMMARY}}" target=”_blank”>{{item.doc_count}}</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- /main -->
+
+<!--
+<div class="container" ng-controller="index">
+<div id="visualization"></div>
+-->
+</div>
+</body></html>

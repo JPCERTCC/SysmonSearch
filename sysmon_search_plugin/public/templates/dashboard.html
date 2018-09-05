@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>statistics</title>
+
+    <style type="text/css">
+        body, html {
+            font-family: sans-serif;
+        }
+    </style>
+
+    <style>
+        table.noBorder_tbl th,td {
+    	    padding: 10px;
+        }
+        table.noBorder_tbl th {
+	    vertical-align: top;
+        }
+        .conditions_w373 {
+	    width: 373px;
+        }
+    </style>
+
+    <style>
+        .box1, .box3, .box5 {
+            float: left;
+            border-bottom : solid;
+            border-right : solid;
+            border-color: #D9D9D9;
+            width: 58%;
+            height: 270px;
+            overflow: auto;
+         }
+
+         .box2, .box4, .box6 {
+            float: left;
+            border-bottom : solid;
+            border-color: #D9D9D9;
+            width: 40%;
+            height: 270px;
+            overflow: auto;
+         }
+
+         .boxA {
+            border: none;
+            height: 270px;
+            width: 100%;
+            &:after {
+               content: "";
+               display: block;
+               clear: both;
+            }
+         }
+
+         .dashboad_total{
+            width: 100%;
+            float: right;
+         }
+         .total{
+         	width: 10%;
+         	float: right;
+         	font-weight: bold;
+         	margin-right : 50px;
+         }
+    </style>
+    <script src="../plugins/sysmon_search_visual/dist/d3.v3.min.js"> </script>
+</head>
+
+<body>
+<div ng-cloak>
+<div id="header">
+<h1 class="h1_logo">SysmonSearch</h1>
+</div>
+
+<div class="global_Nav">
+<ul id="menu" class="clearfix">
+  <li>
+    <a href="sysmon_search_visual#/alert">{{ lang["TAB_ALERT"] }}</a>
+  </li>
+  <li>
+    <a href="sysmon_search_visual#/search">{{ lang["TAB_SEARCH"] }}</a>
+  </li>
+  <li>
+    <a href="sysmon_search_visual#/dashboard" class="active">{{ lang["TAB_STATISTICS"] }}</a>
+  </li>
+  <li>
+    <a href="sysmon_search_visual#/">{{ lang["TAB_EVENT_LIST"] }}</a>
+  </li>
+</ul>
+</div>
+
+<div class="main">
+<div class="ttlBox01 clearfix">
+<h2 class="flt_l">{{ lang["STATISTICS_H2"] }}</h2>
+<div class="period flt_r">
+<div class="select-period">
+	<select ng-model="period" ng-change="ctrl.onChange()"
+            ng-options="period for period in period_list"></select>
+</div>
+</div>
+</div>
+<div class="dashboad_total">
+<span class="total">{{ lang["STATISTICS_TOTAL"] }}：{{ctrl.total}}</span>
+</div>
+
+<div class="boxA">
+ <div class="box1">{{ lang["STATISTICS_DESTINATION_ADDRESS"] }}<div id='bar1'></div></div>
+ <div class="box2">{{ lang["STATISTICS_DESTINATION＿PORT"] }}<div id='pie1'></div></div>
+</div>
+
+<div class="boxA">
+ <div class="box3">{{ lang["STATISTICS_PROCESS"] }}<div id='bar2'></div></div>
+ <div class="box4">{{ lang["STATISTICS_REGISTRY_EVENT"] }}<div id='pie2'></div></div>
+</div>
+
+</div>
+
+
+
+<!-- /main -->
+</div>
+</body>
+</html>

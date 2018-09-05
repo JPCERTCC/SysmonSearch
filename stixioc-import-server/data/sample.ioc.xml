@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<ioc xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.mandiant.com/2010/ioc">
+  <definition>
+
+    <Indicator operator="OR">
+      <!-- IP address -->
+      <IndicatorItem condition="contains">
+        <Context document="PortItem" search="PortItem/remoteIP" type="mir" />
+        <Content type="IP">192.168.1.1</Content>
+      </IndicatorItem>
+      <IndicatorItem condition="contains">
+        <Context document="PortItem" search="PortItem/remoteIP" type="mir" />
+        <Content type="IP">deadbeef:deadbeef:deadbeef:deadbeef</Content>
+      </IndicatorItem>
+    </Indicator>
+
+    <Indicator operator="OR">
+      <!-- Port name -->
+      <IndicatorItem condition="contains">
+        <Context document="PortItem" search="PortItem/remotePort" type="mir" />
+        <Content type="int">5432</Content>
+      </IndicatorItem>
+    </Indicator>
+
+    <Indicator operator="OR">
+      <!-- Host name -->
+<!--
+      <IndicatorItem condition="contains">
+        <Context document="DnsEntryItem" search="DnsEntryItem/Host" type="mir" />
+        <Content type="string">evildomain1.com</Content>
+      </IndicatorItem>
+      <IndicatorItem id="156bc4b6-a2a1-4735-bfe8-6c8d1f7eae38" condition="contains">
+        <Context document="DnsEntryItem" search="DnsEntryItem/RecordData/Host" type="mir" />
+        <Content type="string">evildomain2.com</Content>
+      </IndicatorItem>
+      <IndicatorItem id="e57d9a5b-5e6a-41ec-87c8-ee67f3ed2e20" condition="contains">
+        <Context document="CookieHistoryItem" search="CookieHistoryItem/HostName" type="mir" />
+        <Content type="string">evildomain3.com</Content>
+      </IndicatorItem>
+-->
+    </Indicator>
+
+    <Indicator operator="OR">
+      <!-- Process name -->
+      <IndicatorItem condition="contains">
+        <Context document="ProcessItem" search="ProcessItem/name" type="mir" />
+        <Content type="string">evilMutex</Content>
+      </IndicatorItem>
+    </Indicator>
+
+    <Indicator operator="OR">
+      <!-- File name -->
+      <IndicatorItem condition="contains">
+        <Context document="FileItem" search="FileItem/FileName" type="mir" />
+        <Content type="string">mdmcpq3.PNF</Content>
+      </IndicatorItem>
+    </Indicator>
+
+    <Indicator operator="OR">
+      <!-- Registry key -->
+      <IndicatorItem condition="contains">
+        <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+        <Content type="string">HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\RasAuto\Parameters\ServiceDLL</Content>
+      </IndicatorItem>
+      <IndicatorItem condition="contains">
+        <Context document="RegistryItem" search="RegistryItem/Path" type="mir" />
+        <Content type="string">Services\RasAuto\Parameters</Content>
+      </IndicatorItem>
+    </Indicator>
+
+    <Indicator operator="OR">
+      <!-- Registry value -->
+      <IndicatorItem condition="contains">
+        <Context document="RegistryItem" search="RegistryItem/Text" type="mir" />
+        <Content type="string">svchost.exe</Content>
+      </IndicatorItem>
+      <IndicatorItem condition="contains">
+        <Context document="RegistryItem" search="RegistryItem/Value" type="mir" />
+        <Content type="string">0xffef</Content>
+      </IndicatorItem>
+    </Indicator>
+
+    <Indicator operator="OR">
+      <!-- Hash value -->
+      <IndicatorItem condition="contains">
+        <Context document="FileItem" search="FileItem/Md5sum" type="mir" />
+        <Content type="string">0123456789abcdef0123456789abcdef</Content>
+      </IndicatorItem>
+      <IndicatorItem condition="contains">
+        <Context document="FileItem" search="FileItem/Sha1sum" type="mir" />
+        <Content type="string">aabbccddeeff00112233445566778899</Content>
+      </IndicatorItem>
+      <IndicatorItem condition="contains">
+        <Context document="FileItem" search="FileItem/Sha256sum" type="mir" />
+        <Content type="string">98765432109876543210fedcbafedcba</Content>
+      </IndicatorItem>
+    </Indicator>
+
+  </definition>
+</ioc>

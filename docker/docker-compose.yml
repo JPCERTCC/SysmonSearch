@@ -1,0 +1,53 @@
+version: '2.2'
+services:
+  elasticsearch:
+    build: es
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+    container_name: docker-sysmonsearch-es
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+        - 9200:9200
+    expose:
+        - 9300
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+  kibana:
+    build:
+      context: kibana
+#      args:
+#        - http_proxy=[proxy_server_URL]
+#        - https_proxy=[proxy_server_URL]
+    #volumes:
+    #  - rule_files:/usr/share/kibana/rule_files
+    container_name: docker-sysmonsearch-kibana
+    ports:
+      - 5601:5601
+
+  stixioc-import-server:
+    build:
+      context: stixioc-import-server
+#      args:
+#        - http_proxy=[proxy_server_URL]
+#        - https_proxy=[proxy_server_URL]
+
+    command: bash -c "cd /root/stixioc-import-server/;python server.py"
+    #volumes:
+    #  - rule_files:/root/script/rule_files
+    container_name: docker-stixioc-import-server
+    ports:
+      - 56020:56020
+
+volumes:
+  es-data:
+    driver: local
+  rule_files:
+    driver: local
