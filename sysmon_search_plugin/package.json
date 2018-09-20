@@ -1,11 +1,11 @@
 {
   "name": "sysmon_search_visual",
-  "version": "0.0.0",
-  "description": "sample plugin",
+  "version": "1.0.0",
+  "description": "This Kibana plugin visualize Sysmon's event log",
   "main": "index.js",
   "kibana": {
     "version": "kibana",
-    "templateVersion": "8.0.0"
+    "templateVersion": "1.0.0"
   },
   "scripts": {
     "lint": "eslint **/*.js",
@@ -15,20 +15,6 @@
     "build": "plugin-helpers build",
     "postinstall": "plugin-helpers postinstall",
     "gather-info": "node gather-info.js"
-  },
-  "devDependencies": {
-    "@elastic/eslint-config-kibana": "^0.14.0",
-    "@elastic/eslint-import-resolver-kibana": "^0.9.0",
-    "@elastic/plugin-helpers": "^8.0.1",
-    "babel-eslint": "^8.0.2",
-    "eslint": "^4.11.0",
-    "eslint-plugin-babel": "^4.1.1",
-    "eslint-plugin-import": "^2.3.0",
-    "eslint-plugin-jest": "^21.3.2",
-    "eslint-plugin-mocha": "^4.9.0",
-    "eslint-plugin-prefer-object-spread": "^1.2.1",
-    "eslint-plugin-react": "^7.0.1",
-    "expect.js": "^0.3.1"
   },
   "dependencies": {
     "elasticsearch": "^14.2.1"
