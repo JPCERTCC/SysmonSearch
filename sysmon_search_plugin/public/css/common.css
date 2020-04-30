@@ -2,10 +2,17 @@
 /* CSS Document */
 
 body, html {
-	font-family: sans-serif;
+  font-family: sans-serif;
 }
+
+.main {
+	padding:15px;
+	max-width: 1280px;
+	margin: 0 auto;
+}
+
 .main h2 {
-	color: #666666;
+  color: #666666;
   position: relative;
   padding: 0 0 .15em .75em;
   border-left: 6px solid #ccc;
@@ -31,9 +38,11 @@ body, html {
   clear: both;
 }
 #mynetwork {
-	width: 800px;
-	height: 600px;
+	width: 100%;
+	height: 500px;
 	border: 1px solid lightgray;
+	margin: 10px;
+	float: left;
 }
 .application {
   background-color: #EAEAE9;
@@ -121,9 +130,6 @@ body, html {
   border-left:1px solid #444;
 
 }
-.main {
-	padding:15px;
-}
 .ttlBox01 .period {
 	width: 500px;
 }
@@ -146,13 +152,13 @@ body, html {
 	-o-border-radius: 4px;/* for opera */
 }
 .search_Box {
-	width: 100%;
-	margin-bottom: 30px;
+	margin-bottom: 10px;
+	float:left;
 }
 .search_Box_Ttl {
 	color: #666;
 	font-weight: bold;
-	padding: .75em 1em;
+	padding: .15em 1em;
   border-bottom: 1px solid #ccc;
   background: -webkit-linear-gradient(top, #fff 0%, #f0f0f0 100%);
   background: linear-gradient(to bottom, #fff 0%, #f0f0f0 100%);
@@ -209,10 +215,11 @@ body, html {
 	-webkit-border-radius: 4px;/* for Safari and Chrome */
 	-moz-border-radius: 4px; /* for Firefox */
 	-o-border-radius: 4px;/* for opera */
-	margin-bottom: 10px;
+	margin: 10px;
 	text-align: center;
 	box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.29);
 }
+
 .detectionBox .db_main .button.gray {
 	background: #ddd;
 	color:#666;
@@ -229,7 +236,7 @@ body, html {
 	margin-right: 5px;
 }
 .detectionBox_Result {
-	width: 500px;
+	/*width: 500px;*/
 	margin-bottom: 30px;
 }
 .detectionBox_Result .colum05{
@@ -241,7 +248,7 @@ body, html {
 	border-left: none;
 }
 .detectionBox_Result .item_Name {
-	display: block;
+	/*display: block;*/
 	font-size: 14px;
 	color: #666;
 	font-weight: bold;
@@ -255,6 +262,7 @@ table.table {
 	border-spacing: 0;
 	background-color: #fff;
 	border: 1px solid #D9D9D9;
+	/*table-layout: fixed;*/
 }
 table.table th {
 	background-color: #F1F1EA;
@@ -262,7 +270,13 @@ table.table th {
 table.table th,
 table.table td {
 	border-left: 1px solid #D9D9D9;
+        word-break:break-word;
 }
+table.legend {
+	border-spacing: 0;
+	/*border: 1px solid #D9D9D9;*/
+}
+
 .addButton {
 	display: inline-block;
 	white-space: nowrap;
@@ -342,3 +356,91 @@ textarea.detail  {
 	resize: vertical;
 	width: 1230px;
 }
+
+.resultButton {
+    padding: 5px 8px;
+    border: 1px solid #ccc;
+    width: 100px;
+    text-align: center;
+    border-radius: 4px;
+    color: #666;
+    font-weight: bold;
+}
+.resultButton:hover {
+    cursor: pointer;
+    opacity: 0.7;
+    -moz-opacity: 0.7;
+    filter: alpha(opacity=70);
+}
+
+/*
+.resultTable {
+    display: none;
+}
+*/
+.alertTable {
+    table-layout: auto;
+}
+
+table.noBorder_tbl th,td {
+    padding: 10px;
+}
+table.noBorder_tbl th {
+    vertical-align: top;
+}
+
+/* dashboard */
+.box1, .box3, .box5 {
+	float: left;
+	border-bottom : solid;
+	border-right : solid;
+	border-color: #D9D9D9;
+	width: 50%;
+	height: 270px;
+	overflow: auto;
+ }
+
+ .box2, .box4, .box6 {
+	float: left;
+	border-bottom : solid;
+	border-color: #D9D9D9;
+	width: 40%;
+	height: 270px;
+	overflow: auto;
+ }
+
+ .boxA {
+	border: none;
+	height: 270px;
+	width: 100%;
+	&:after {
+	   content: "";
+	   display: block;
+	   clear: both;
+	}
+ }
+
+ .dashboad_total{
+	width: 100%;
+	float: right;
+ }
+
+ .total{
+	 width: 100%;
+	 font-weight: bold;
+	 margin-bottom : 30px;
+ }
+
+input.button{
+	padding:10px;
+	border-width: thin;
+}
+
+.vis-timeline .vis-bar {
+	fill-opacity: 1;
+ }
+
+ #visualization{
+	 width: 80%;
+	 float: left;
+ }

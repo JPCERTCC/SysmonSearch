@@ -1,0 +1,14 @@
+{
+  "name": "sysmon_search_r",
+  "version": "0.0.0",
+  "description": "An awesome Kibana plugin",
+  "main": "index.js",
+  "kibana": {
+    "version": "kibana",
+    "templateVersion": "1.0.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.15",
+    "query-string": "^6.10.1"
+  }
+}

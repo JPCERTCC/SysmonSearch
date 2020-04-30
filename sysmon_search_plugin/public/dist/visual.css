@@ -2,6 +2,51 @@
    width: 16px;
    height: 16px;
    float: left;
+   margin-right: 10px;
+}
+
+.visgroup0 {
+   fill: #87CEFA;
+ }
+
+.visgroup1 {
+   fill: #FFDEAD;
+}
+
+.visgroup2 {
+   fill: #7B68EE;
+}
+
+.visgroup3 {
+   fill: #8FBC8F;
+}
+
+.visgroup4 {
+   fill: #FF3366;
+}
+
+.visgroup5 {
+   fill: #33FFFF;
+}
+
+.visgroup6 {
+   fill: #666699;
+}
+
+.visgroup7 {
+   fill: #00FA9A;
+}
+
+.visgroup8 {
+   fill: #FF00FF;
+}
+
+.visgroup9 {
+   fill: #FFA500;
+}
+
+.visgroup10 {
+   fill: #6B8E23;
 }
 
 #square0 {
@@ -40,6 +85,14 @@
    background: #FF00FF;
 }
 
+#square9 {
+   background: #FFA500;
+}
+
+#square10 {
+   background: #6B8E23;
+}
+
 path {  stroke: #fff; }
 .axis {  font: 10px sans-serif; }
 .legend tr{    border-bottom:1px solid grey; }
@@ -54,19 +107,21 @@ path {  stroke: #fff; }
   shape-rendering: crispEdges;
 }
 
+/*.x.axis path {  display: none; }*/
 
-.x.axis path {  display: none; }
 .legend{
-    margin-bottom:30px;
+    margin:30px;
     display:inline-block;
     border-collapse: collapse;
     border-spacing: 0px;
 }
+
 .legend td{
-    padding:4px 5px;
     vertical-align:bottom;
 }
+
 .legendFreq, .legendPerc{
     align:right;
     width:20px;
 }
+

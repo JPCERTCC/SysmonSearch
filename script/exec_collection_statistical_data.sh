@@ -11,7 +11,9 @@ init_env() {
 
 start() {
     #nohup python $SCRIPTPATH >> $OUT_LOG 2>&1 &
-    python $SCRIPTPATH $1
+    DATE=$1
+    python $SCRIPTPATH $DATE
+    #python $SCRIPTPATH $1
 }
 
 echo -n "Starting collection_statistical_data.py: "

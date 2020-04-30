@@ -2,19 +2,18 @@
 <html>
 <head>
     <title>Event List</title>
-
-    <style type="text/css">
-        body, html {
-            font-family: sans-serif;
-        }
-    </style>
+    <!--
     <script src="../plugins/sysmon_search_visual/dist/d3.v3.min.js"> </script>
+    -->
 </head>
 <body>
+
 <div ng-cloak>
-<div id="header">
-<h1 class="h1_logo">SysmonSearch</h1>
-</div>
+
+<!--
+  <div id="header"><h1 class="h1_logo">SysmonSearch</h1></div>
+-->
+
 <div class="global_Nav">
 <ul id="menu" class="clearfix">
   <li>
@@ -31,15 +30,33 @@
   </li>
 </ul>
 </div>
+
 <div class="main">
-<h2>{{ lang["PROCESS_H2"] }}</h2>
+<!--
+  <h2>{{ lang["PROCESS_H2"] }}</h2>
 <h2>{{ lang["TARGET_HOSTNAME"] }}:{{ctrl.hostname}}</h2>
 <h2>{{ lang["TARGET_DATE"] }}:{{ctrl.date}}</h2>
+<h2>Total:{{ctrl.data.length}}</h2>
+-->
+
+<div>
+    <table >
+      <tr>
+        <th>{{ lang["PROCESS_H2"] }} </th><td></td>
+        <th>{{ lang["TARGET_HOSTNAME"] }}</th><td>{{ctrl.hostname}}</td>
+        <th>{{ lang["TARGET_DATE"] }}</th><td>{{ctrl.date}}</td>
+        <th>Total</th><td>{{ctrl.data.length}}</td>
+      </tr>
+    </table> 
+  </div>
+
 <div class="search_Box">
+
 <div class="search_Box_Ttl">
 <img src="../plugins/sysmon_search_visual/images/search_icon.png" alt="{{lang.ALT_SEARCHICON}}" width="21" height="20" />
 <label>{{ lang["SEARCHBOX_SEARCH"] }}:</label>
 </div>
+
 <div class="search_Box_main">
 <label>
   <input name="keyword" ng-model="keyword" type="text" placeholder="{{lang.SEARCHBOX_PLACEHOLDER_KEYWORD}}" class="search_keyword" ng-keyup="$event.keyCode == 13 ? ctrl.onkeyup(keyword,hash) : null">
@@ -48,19 +65,23 @@
   <input name="hash" ng-model="hash" type="text" placeholder="{{lang.SEARCHBOX_PLACEHOLDER_HASH}}" class="search_hash" ng-keyup="$event.keyCode == 13 ? ctrl.onkeyup(keyword,hash) : null">
 </label>
 </div>
-</div>
 
+</div><!-- /search_Box -->
+
+<div>
 <table class="table">
   <thead>
     <tr>
-      <th>{{ lang["PROCESS_TABLE_DATE"] }}</th>
-      <th>{{ lang["PROCESS_TABLE_TYPE"] }}</th>
-      <th>{{ lang["PROCESS_TABLE_SOURCE"] }}</th>
-      <th>{{ lang["PROCESS_TABLE_VALUE"] }}</th>
+      <th style="width:10%">record_id</th>
+      <th style="width:20%">{{ lang["PROCESS_TABLE_DATE"] }}</th>
+      <th style="width:10%">{{ lang["PROCESS_TABLE_TYPE"] }}</th>
+      <th style="width:30%">{{ lang["PROCESS_TABLE_SOURCE"] }}</th>
+      <th style="width:30%">{{ lang["PROCESS_TABLE_VALUE"] }}</th>
     </tr>
   </thead>
   <tbody>
     <tr ng-repeat="day_data in ctrl.data" class="{{ ctrl.isTarget(day_data._id) ? 'emphasis' : ''}}">
+      <td title="number" >{{day_data.number}}</td>
       <td title="{{lang.DATA_NAME_UTCTIME}}" >{{day_data.date}}</td>
       <td title="{{lang.DATA_NAME_EVENTTYPE}}" >{{day_data.type}}</td>
       <td title="{{lang.DATA_NAME_PROCESS}}" >{{day_data.process}}</td>
@@ -69,7 +90,9 @@
   </tbody>
 </table>
 </div>
-</div>
+
+</div><!-- /ng-cloak -->
+
 </body>
 </html>
 

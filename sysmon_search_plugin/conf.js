@@ -12,6 +12,8 @@ var conf = {
     //internal time (hour)
     "refine_time_range": "1",
     //maximum object number
-    "max_object_num": "30"
+    "max_object_num": "30",
+    "elasticsearch_user": "elastic",
+    "elasticsearch_password": "changeme",
 };
 exports.conf = conf;

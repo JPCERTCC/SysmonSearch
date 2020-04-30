@@ -2,31 +2,8 @@
 <html>
 <head>
 	<title>Event List</title>
-
-    <style type="text/css">
-body, html {
-    font-family: sans-serif;
-}		
-.resultButton {
-    padding: 5px 8px;
-    border: 1px solid #ccc;
-    width: 100px;
-    text-align: center;
-    border-radius: 4px;
-    color: #666;
-    font-weight: bold;
-}
-.resultButton:hover {
-    cursor: pointer;
-    opacity: 0.7;
-    -moz-opacity: 0.7;
-    filter: alpha(opacity=70);
-}
-.resultTable {
-    display: none;
-}
-    </style>
-    <script src="../plugins/sysmon_search_visual/dist/d3.v3.min.js"> </script>
+    <script src="../plugins/sysmon_search_visual/dist/d3.v5.min.js"> </script>
+    <!--
     <script src="../plugins/sysmon_search_visual/dist/jquery-3.3.1.min.js"> </script>
     <script type="text/javascript">
       $(function(){
@@ -36,13 +13,15 @@ body, html {
        });
       });
     </script>
-
+    -->
 </head>
 <body>
 <div ng-cloak>
-<div id="header">
-<h1 class="h1_logo">SysmonSearch</h1>
-</div>
+
+  <!--
+  <div id="header"><h1 class="h1_logo">SysmonSearch</h1></div>
+  -->
+
 <div class="global_Nav">
 <ul id="menu" class="clearfix">
   <li>
@@ -60,6 +39,7 @@ body, html {
 </ul>
 </div>
 <div class="main">
+
 <div class="ttlBox01 clearfix">
 <h2 class="flt_l">{{ lang["ALERT_H2"] }}</h2>
 <div class="period flt_r">
@@ -68,26 +48,28 @@ body, html {
             ng-options="period for period in period_list"></select>
 </div>
 </div>
-</div>
+</div><!-- /ttlBox01 -->
+
 <div class="detectionBox">
+
 <div class="db_ttl">{{ lang["ALERT_DETECTION_BOX"] }}</div>
 <div class="db_main clearfix">
-<table class="table">
-<tr ng-repeat="rule in ctrl.rules">
+<table class="table"><tr ng-repeat="rule in ctrl.rules">
 <td ><span id="">{{rule.value}}</span>
      <span class="flt_r">
-        <a href="" class="{{rule.filename ? 'delButton'  : 'non-display'}} " id="del_buttun" ng-click="ctrl.delFile(rule.filename)">{{ lang["ALERT_DELETE_BUTTON"] }}</a>
+        <a href="" class="{{rule.filename?'delButton':'non-display'}}" id="del_buttun" ng-click="ctrl.delFile(rule.filename)">{{ lang["ALERT_DELETE_BUTTON"] }}</a>
      </span>
 </td>
-</tr>
-</table>
+</tr></table>
 <div ng-init="keywords = {sort_item: 'event_id', sort_order: 'asc'}"></div>
     <input type="hidden" name="sort_item" ng-model="keywords.sort_item">
     <input type="hidden" name="sort_order" ng-model="keywords.sort_order">
-</div>
-</div>
+</div><!--/db_main-->
+</div><!--/db_ttl-->
+
 <div class="detectionBox detectionBox_Result">
 <div class="db_ttl">{{ lang["RESULTBOX_RESULT"] }}</div>
+
 <div class="db_main clearfix">
 <table class="table">
       <thead>
@@ -104,40 +86,10 @@ body, html {
           <td>{{data.unique_hosts}}</td>
         </tr>
       </tbody>
-    </table>
-</div>
-<div class="resultButton">result</div>
-    <table class="table resultTable">
-      <thead>
-        <tr>
-            <th><a ng-click="ctrl.sort(period, keywords, 'event_data.UtcTime.keyword')">UtcTime{{ctrl.utc_time}}</a></th>
-            <th><a ng-click="ctrl.sort(period, keywords, 'event_id')">EventId{{ctrl.event_id}}</a></th>
-            <th><a ng-click="ctrl.sort(period, keywords, 'level.keyword')">Level{{ctrl.level}}</a></th>
-            <th><a ng-click="ctrl.sort(period, keywords, 'computer_name.keyword')">Computer{{ctrl.computer_name}}</a></th>
-            <th><a ng-click="ctrl.sort(period, keywords, 'event_data.User.keyword')">UserName{{ctrl.user_name}}</a></th>
-            <th><a ng-click="ctrl.sort(period, keywords, 'event_data.Image.keyword')">Image{{ctrl.image}}</a></th>
-            <th><a ng-click="ctrl.sort(period, keywords, 'rule.file_name.keyword')">RuleName{{ctrl.rulename}}</a></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="data in ctrl.search_data">
-          <td title="{{lang.DATA_NAME_UTCTIME}}">{{data.utc_time}}</td>
-          <td title="{{lang.DATA_NAME_EVENTID}}">{{data.event_id}}</td>
-          <td title="{{lang.DATA_NAME_LEVEL}}">{{data.level}}</td>
-          <td title="{{lang.DATA_NAME_COMPUTER}}">
-              {{data.computer_name}}<BR>
-              <a href="sysmon_search_visual#/process_list/{{data.computer_name}}/{{data.decription}}/{{data.utc_time}}/{{data._id}}" title="{{lang.OPEN_PROCESS}}" target="_blank">{{lang.RESULTBOX_LINKNAME_TABLE}}</a>
-              <a href="sysmon_search_visual#/process/{{data.computer_name}}/{{data.utc_time}}/{{data.process_guid ? data.process_guid : data.source_guid ? data.source_guid : 0}}" title="{{lang.OPEN_CORRELATION}}" target="_blank">{{lang.RESULTBOX_LINKNAME_GRAPH}}</a>
-          </td>
-          <td title="{{lang.DATA_NAME_USERNAME}}">{{data.user_name}}</td>
-          <td title="{{lang.DATA_NAME_IMAGE}}"><a href="sysmon_search_visual#/process_overview/{{data.computer_name}}/{{data.date.substring(0,10)}}/{{data.process_guid}}" title="{{lang.OPEN_DETAIL}}" target="_blank" class="{{data.process_guid ? 'btn-abled' : 'btn-disabled'}}">{{data.image}}</a></td>
-          <td title="{{ctrl.getRuleInfo(data.rule_name)}}">{{data.rule_name}}</td>
-        </tr>
-      </tbody>
-    </table>
-</div>
+</table>
+</div><!--/db_main-->
 
-<div>
+<div id="host_count">
     <table class="table">
       <thead>
         <tr>
@@ -152,7 +104,45 @@ body, html {
         </tr>
       </tbody>
     </table>
-</div>
+</div><!--/host_count-->
+
+<div class="resultButton">result</div>
+    <table class="table">
+      <thead>
+        <tr><!-- sort sysmon-search-alert -->
+            <th><a ng-click="ctrl.sort(period, keywords, 'event_data.UtcTime.keyword')">UtcTime{{ctrl.utc_time}}</a></th>
+            <th><a ng-click="ctrl.sort(period, keywords, 'event_id')">EventId{{ctrl.event_id}}</a></th>
+            <!--
+            <th><a ng-click="ctrl.sort(period, keywords, 'level.keyword')">Level{{ctrl.level}}</a></th>
+            -->
+            <th><a ng-click="ctrl.sort(period, keywords, 'computer_name.keyword')">Computer{{ctrl.computer_name}}</a></th>
+            <th><a ng-click="ctrl.sort(period, keywords, 'event_data.User.keyword')">UserName{{ctrl.user_name}}</a></th>
+            <th><a ng-click="ctrl.sort(period, keywords, 'event_data.Image.keyword')">Image{{ctrl.image}}</a></th>
+            <th><a ng-click="ctrl.sort(period, keywords, 'rule.file_name.keyword')">RuleName{{ctrl.rulename}}</a></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="data in ctrl.search_data">
+          <td title="{{lang.DATA_NAME_UTCTIME}}">{{data.utc_time}}</td>
+          <td title="{{lang.DATA_NAME_EVENTID}}">{{data.event_id}}</td>
+<!--
+          <td title="{{lang.DATA_NAME_LEVEL}}">{{data.level}}</td>
+-->
+          <td title="{{lang.DATA_NAME_COMPUTER}}">
+              {{data.computer_name}}<BR>
+              <a href="sysmon_search_visual#/process_list/{{data.computer_name}}/{{data.description}}/{{data.utc_time}}/{{data._id}}" title="{{lang.OPEN_PROCESS}}" target="_blank">{{lang.RESULTBOX_LINKNAME_TABLE}}</a>
+              <a href="sysmon_search_visual#/process/{{data.computer_name}}/{{data.utc_time}}/{{data.process_guid ? data.process_guid : data.source_guid ? data.source_guid : 0}}" title="{{lang.OPEN_CORRELATION}}" target="_blank">{{lang.RESULTBOX_LINKNAME_GRAPH}}</a>
+          </td>
+          <td title="{{lang.DATA_NAME_USERNAME}}">{{data.user_name}}</td>
+          <td title="{{lang.DATA_NAME_IMAGE}}">
+            <a href="sysmon_search_visual#/process_overview/{{data.computer_name}}/{{data.date.substring(0,10)}}/{{data.process_guid}}" title="{{lang.OPEN_DETAIL}}" target="_blank" class="{{data.process_guid ? 'btn-abled' : 'btn-disabled'}}">{{data.image}}</a>
+          </td>
+          <td title="{{ctrl.getRuleInfo(data.rule_name)}}">{{data.rule_name}}</td>
+        </tr>
+      </tbody>
+    </table>
+</div><!--/resultButton-->
+
 
 </div>
 </div>

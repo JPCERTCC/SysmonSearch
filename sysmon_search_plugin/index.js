@@ -11,10 +11,6 @@ export default function (kibana) {
         description: 'sample SysmonSearch plugin',
         main: 'plugins/sysmon_search_visual/app'
       },
-      
-      translations: [
-        resolve(__dirname, './translations/es.json')
-      ]
     },
     config(Joi) {
       return Joi.object({
@@ -22,7 +18,6 @@ export default function (kibana) {
       }).default();
     },
     init(server, options) {
-      // Add server routes and initialize the plugin here
       sysmon_search_Route(server);
     }
   });

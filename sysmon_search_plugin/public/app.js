@@ -2,7 +2,6 @@ import moment from 'moment';
 import {
     uiModules
 } from 'ui/modules';
-import uiRoutes from 'ui/routes';
 import {conf as config} from '../conf.js';
 
 // -------------------------------------------------------
@@ -10,28 +9,19 @@ import {conf as config} from '../conf.js';
 import 'ui/autoload/styles';
 import './less/main.less';
 import * as vis_network from './dist/vis-network.min.js';
+//const vis_network = require('vis-network')
+//const vis_network = require('vis')
+
 import * as vis_graph from './dist/vis-timeline-graph2d.min.js';
 import './dist/vis-network.min.css';
 import './dist/vis-timeline-graph2d.min.css';
 
 import './css/common.css';
-// import './dist/d3.v3.min.js';
+//import './dist/d3.v3.min.js';
 import './dist/visual.css';
 import './dist/jquery-3.3.1.min.js';
-// -------------------------------------------------------
+//import create_network from './js/network';
 
-// -------------------------------------------------------
-// Sample HTML
-import hostsHTML from './templates/hosts.html';
-import eventHTML from './templates/event.html';
-import host_statisticHTML from './templates/host_statistic.html';
-import process_listHTML from './templates/process_list.html';
-import PTreeHTML from './templates/process_tree.html';
-import POverviewHTML from './templates/overview.html';
-import PDetailHTML from './templates/detail.html';
-import alertHTML from './templates/alert.html';
-import searchHTML from './templates/search.html';
-import dashboardHTML from './templates/dashboard.html';
 // -------------------------------------------------------
 
 // -------------------------------------------------------
@@ -40,92 +30,65 @@ var gLocal_en = require( "./assets/i18n/locale-en.json" );
 var gLangData = gLocal_en;
 // -------------------------------------------------------
 
-uiRoutes.enable();
-uiRoutes
-    .when('/', {
-        template: hostsHTML,
-        controller: 'hostsController',
-        controllerAs: 'ctrl'
-    })
-    .when('/hosts', {
-        template: hostsHTML,
-        controller: 'hostsController',
-        controllerAs: 'ctrl'
-    })
-    .when('/host_statistic/:hostname/:date', {
-        template: host_statisticHTML,
-        controller: 'host_statisticController',
-        controllerAs: 'ctrl'
-    })
-    .when('/event/:hostname/:date', {
-        template: eventHTML,
-        controller: 'eventController',
-        controllerAs: 'ctrl'
-    })
-    .when('/process_list/:hostname/:eventtype/:date/:_id', {
-        template: process_listHTML,
-        controller: 'process_listController',
-        controllerAs: 'ctrl'
-    })
-    .when('/process/:hostname/:date/:guid?', {
-        template: PTreeHTML,
-        controller: 'processController',
-        controllerAs: 'ctrl'
-    })
-    .when('/process_overview/:hostname/:date/:guid', {
-        template: POverviewHTML,
-        controller: 'process_overviewController',
-        controllerAs: 'ctrl'
-    })
-    .when('/process_detail/:hostname/:date/:guid/:_id', {
-        template: PDetailHTML,
-        controller: 'process_detailController',
-        controllerAs: 'ctrl'
-    })
-    .when('/alert', {
-        template: alertHTML,
-        controller: 'alertController',
-        controllerAs: 'ctrl'
-    })
-    .when('/search', {
-        template: searchHTML,
-        controller: 'searchController',
-        controllerAs: 'ctrl'
-    })
-    .when('/dashboard', {
-        template: dashboardHTML,
-        controller: 'dashboardController',
-        controllerAs: 'ctrl'
-    })
+import uiRoutes from './routes'
 
 // -------------------------------------------------------
 //
+
+// event list
 uiModules
     .get('app/sysmon_search_visual/hosts', [])
     .controller('hostsController', function($scope, $route, $http, $interval) {
         // Set Language Data
         $scope.lang = gLangData;
 
+        function formatDate2(date) {
+            var d = ("0" + date.getDate()).slice(-2);
+            var m = ("0" + (date.getMonth() + 1)).slice(-2);
+            var y = date.getFullYear();
+            return y + '-' + m + '-' + d
+            // + 'T00:00:00Z';
+        }
+
+        function default_date_range(keywords) {
+            var st_dt = new Date();
+            st_dt = getPastDate(st_dt,1,"month")
+            //keywords.fm_start_date = formatDate2(st_dt) + 'T00:00:00Z';
+            //keywords.fm_end_date = formatDate2(new Date()) + 'T23:59:59Z';
+            keywords.fm_start_date = formatDate2(st_dt) + 'T00:00:00';
+            keywords.fm_end_date = formatDate2(new Date()) + 'T23:59:59';
+            return keywords;
+        }
         this.keywords = default_date_range({});
-        $http.post('../api/sysmon-search-plugin/hosts', this.keywords).then((response) => {
+
+        $http.post('../api/sysmon-search-plugin/hosts', this.keywords)
+        .then((response) => {
             this.daily_hosts = response.data;
         });
 
         this.onkeyup = function(keywords) {
-
             if (typeof keywords !== "undefined") {
-                if (("start_date" in keywords === false || typeof keywords.start_date === "undefined" || keywords.start_date === null) &&
-                    ("end_date" in keywords === false || typeof keywords.end_date === "undefined" || keywords.end_date === null)) {
+                if (("start_date" in keywords === false
+                      || typeof keywords.start_date === "undefined"
+                      || keywords.start_date === null
+                    ) && (
+                     "end_date" in keywords === false
+                      || typeof keywords.end_date === "undefined"
+                      || keywords.end_date === null)) {
 
                     keywords = default_date_range(keywords);
 
                 } else {
-                    if ("start_date" in keywords && typeof keywords.start_date !== "undefined" && keywords.start_date !== null) {
+                    if ("start_date" in keywords
+                         && typeof keywords.start_date !== "undefined"
+                         && keywords.start_date !== null) {
                         keywords.fm_start_date = formatDate2(new Date(keywords.start_date));
                     } else {
                         delete keywords["fm_start_date"];
                     }
-                    if ("end_date" in keywords && typeof keywords.end_date !== "undefined" && keywords.end_date !== null) {
+                    if ("end_date" in keywords
+                         && typeof keywords.end_date !== "undefined"
+                         && keywords.end_date !== null) {
                         var dt = new Date(keywords.end_date);
                         dt.setDate(dt.getDate() + 1);
                         keywords.fm_end_date = formatDate2(dt);
@@ -136,204 +99,111 @@ uiModules
             } else {
                 keywords = default_date_range({});
             }
-
-            $http.post('../api/sysmon-search-plugin/hosts', keywords).then((response) => {
+            $http.post('../api/sysmon-search-plugin/hosts', keywords)
+            .then((response) => {
                 this.daily_hosts = response.data;
             });
         };
     })
 
-function default_date_range(keywords) {
-    var st_dt = new Date();
-    getPastDate(st_dt,1,"month")
-    keywords.fm_start_date = formatDate2(st_dt);
-    keywords.fm_end_date = formatDate2(new Date());
-    return keywords;
-}
-
+// 2d graph
 uiModules
     .get('app/sysmon_search_visual/host_statistic', [])
     .controller('host_statisticController', function($scope, $route, $http, $interval) {
         // Set Language Data
         $scope.lang = gLangData;
 
+        var hostname = $route.current.params.hostname;
+
         var data = {};
-        data.hostname = $route.current.params.hostname;
+        data.hostname = hostname;
+
+        function getFutureDate(date, interval, type) {
+            if (type == "month") {
+                var month = date.getMonth();
+                date.setMonth(date.getMonth() + interval);
+                var diff = date.getMonth() - month;
+                if (diff < 0) diff = diff + 12;
+                if (diff != interval){
+                    date.setDate(1);
+                    date.setDate(date.getDate() - 1);
+                }
+            } else {
+                date.setDate(date.getDate() + interval);
+            }
+            return date;
+        }
+
+        function getDateBeggining(date) {
+            date.setDate(1);
+            return date;
+        }
+
         var date = $route.current.params.date;
         var year = Number(date.substring(0, 4));
         var month = Number(date.substring(5, 7)) - 1;
         var day = Number(date.substring(8, 10));
         var date1 = getDateBeggining(new Date(year, month, day));
-        var date2 = getDateBeggining(getFutureDate(new Date(year, month, day), 1, "month"));
+        var date2 = getDateBeggining(
+            getFutureDate(new Date(year, month, day), 1, "month")
+        );
         data.period = getDateQueryFromDate(date1, date2);
-        $http.post('../api/sysmon-search-plugin/events', data).then((response) => {
-            this.hostname = $route.current.params.hostname;
-            var items = [];
-            for (var index in response.data) {
-                var item = response.data[index];
-                var g1 = {
-                    "group": 0,
-                    "x": item.date,
-                    "y": item.result.create_process,
-                    "label": "create_process"
-                };
-                var g2 = {
-                    "group": 1,
-                    "x": item.date,
-                    "y": item.result.create_file,
-                    "label": "create_file"
-                };
-                var g3 = {
-                    "group": 2,
-                    "x": item.date,
-                    "y": item.result.registory,
-                    "label": "registory"
-                };
-                var g4 = {
-                    "group": 3,
-                    "x": item.date,
-                    "y": item.result.net,
-                    "label": "net"
-                };
-                var g5 = {
-                    "group": 4,
-                    "x": item.date,
-                    "y": item.result.remote_thread,
-                    "label": "remote_thread"
-                };
-                var g6 = {
-                    "group": 5,
-                    "x": item.date,
-                    "y": item.result.file_create_time,
-                    "label": "file_create_time"
-                };
-                var g7 = {
-                    "group": 6,
-                    "x": item.date,
-                    "y": item.result.image_loaded,
-                    "label": "image_loaded"
-                };
-                var g8 = {
-                    "group": 7,
-                    "x": item.date,
-                    "y": item.result.wmi,
-                    "label": "wmi"
-                };
-                var g9 = {
-                    "group": 8,
-                    "x": item.date,
-                    "y": item.result.other,
-                    "label": "other"
-                };
-                items.push(g1);
-                items.push(g2);
-                items.push(g3);
-                items.push(g4);
-                items.push(g5);
-                items.push(g6);
-                items.push(g7);
-                items.push(g8);
-                items.push(g9);
+        $http.post('../api/sysmon-search-plugin/events', data)
+        .then((response) => {
+            this.hostname = hostname;
+            this.date = date;
+
+            var count = [];
+            var events = response.data["count"];
+            for (let [key, value] of Object.entries(events)) {
+              count.push({
+                "type":key,
+                "value":value,
+              });
             }
-            // console.log( items );
+            this.data = count;
 
             var container = document.getElementById('visualization');
+
+            var items = response.data["items"];
+
+            var category = response.data["groups"];
             var groups = new vis_graph.DataSet();
-            groups.add({
-                id: 0,
-                content: "create process"
-            })
-            groups.add({
-                id: 1,
-                content: "file access"
-            })
-            groups.add({
-                id: 2,
-                content: "registory access"
-            })
-            groups.add({
-                id: 3,
-                content: "network access"
-            })
-            groups.add({
-                id: 4,
-                content: "remote thread"
-            })
-            groups.add({
-                id: 5,
-                content: "file create time"
-            })
-            groups.add({
-                id: 6,
-                content: "image loaded"
-            })
-            groups.add({
-                id: 7,
-                content: "wmi"
-            })
-            groups.add({
-                id: 8,
-                content: "other"
-            })
+            for (var index in category){
+                groups.add({
+                    id: index,
+                    content: category[index],
+                    className: "visgroup" + index
+                })
+            }
 
             var options = {
                 style: 'bar',
                 stack: true,
                 barChart: {
                     width: 40,
-                    align: 'center'
+                    align: 'center',
                 }, // align: left, center, right
-                drawPoints: false,
-                dataAxis: {
-                    icons: true
+                drawPoints: function renderer(item, group, graph2d){
+                    if(item.y<10){
+                      return false;
+                    }
+                    /*
+                    return {
+                      style: "square", size: 0
+                    }
+                    */
                 },
-                //legend: {
-                //    enabled: true
-                //},
+                dataAxis: {icons: false},
+                legend: {enabled:false},
                 start: getViewFormat(getPastDate(date1, 1, "day"), 2),
                 end: getViewFormat(date2, 2),
                 orientation: 'top',
-                moveable: false,
-                zoomable: false
+                sort:true,
+                zoomable: true
             };
 
             var graph2d = new vis_graph.Graph2d(container, items, groups, options);
-
-            function get_category_name_from_groupId(groupId) {
-                var category = '';
-                switch (groupId) {
-                    case 0:
-                        category = 'create_process';
-                        break;
-                    case 1:
-                        category = 'create_file';
-                        break;
-                    case 2:
-                        category = 'registory';
-                        break;
-                    case 3:
-                        category = 'net';
-                        break;
-                    case 4:
-                        category = 'remote_thread';
-                        break;
-                    case 5:
-                        category = 'file_create_time';
-                        break;
-                    case 6:
-                        category = 'image_loaded';
-                        break;
-                    case 7:
-                        category = 'wmi';
-                        break;
-                        // case 8:
-                        // category = 'other';
-                        // break;
-                    default:
-                        break;
-                }
-                return category;
-            }
 
             function get_category_name(date_str, event) {
                 var y = event.value[0];
@@ -343,45 +213,54 @@ uiModules
                 var bar_items = [];
                 var bar_height = 0;
                 var ids = linegraph.itemsData.getIds();
-
+                //console.log(ids);
                 for (var i = 0; i < ids.length; i++) {
                     var height = 0;
                     var item = linegraph.itemsData._getItem(ids[i]);
+                    //console.log(item);
+                    if (item.x !== date_str) continue;
 
-                    if (item.x !== date_str) {
-                        continue;
-                    }
                     bar_height = bar_height + item.y;
                     bar_items.push({
                         height: item.y,
                         groupId: item.group
                     });
                 }
+                //console.log(bar_items);
 
                 var cur_top = bar_height;
                 var groupId = -1;
                 for (var i = 0; i < bar_items.length; i++) {
                     var item = bar_items[i];
-                    if (item.height == 0) {
-                        continue;
-                    }
+                    console.log(item);
+                    if (item.height == 0) continue;                    
                     var cur_bottom = cur_top - item.height;
-
                     if (cur_bottom <= bar_height - y && bar_height - y <= cur_top) {
                         groupId = item.groupId;
-                        // alert("groupId:"+groupId);
                         break;
                     }
                     cur_top = cur_bottom;
                 }
                 var category_name = '';
                 if (groupId != -1) {
-                    category_name = get_category_name_from_groupId(groupId);
+                    category_name = category[groupId];
                 }
                 return category_name;
             }
 
-            graph2d.on("click", function(params) {});
+            graph2d.on("rangechange", function() {
+                graph2d.redraw();
+            });
+
+            
+            graph2d.on("contextmenu", function(event) {
+                var click_date = event.time;
+                var click_date_str = getViewFormat(click_date, "2");
+                var category = get_category_name(click_date_str, event);
+                alert(category);
+            });
+            
+
             graph2d.on("doubleClick", function(event) {
                 var click_date = event.time;
                 var click_date_str = getViewFormat(click_date, "2");
@@ -390,13 +269,15 @@ uiModules
 
                 var category = get_category_name(click_date_str, event);
                 if (category == '') return;
-                var url = 'sysmon_search_visual#/process_list/' + $route.current.params.hostname + '/' + category + '/' + click_date_str + '/0';
-                console.log(url);
+                var url = 'sysmon_search_visual#/process_list/' + hostname + '/' + category + '/' + click_date_str + '/0';
+                //console.log(url);
                 window.open(url, "_blank");
             });
+
         });
     })
 
+// pie chart
 uiModules
     .get('app/sysmon_search_visual/event', [])
     .controller('eventController', function($scope, $route, $http, $interval) {
@@ -408,147 +289,51 @@ uiModules
             return true;
         }
 
-        var url = '../api/sysmon-search-plugin/event/' + $route.current.params.hostname + '/' + $route.current.params.date;
+        var params = $route.current.params;
+        var url = '../api/sysmon-search-plugin/event/' + params.hostname + '/' + params.date;
         $http.get(url).then((response) => {
-            this.hostname = $route.current.params.hostname;
-            this.date = $route.current.params.date;
+            this.hostname = params.hostname;
+            this.date = params.date;
             var items = [];
-            for (var index in response.data) {
-                var item = response.data[index];
-                // console.log( item );
-                var g1 = {
-                    "type": "create_process",
-                    "value": item.result.create_process
-                };
-                var g2 = {
-                    "type": "create_file",
-                    "value": item.result.create_file
-                };
-                var g3 = {
-                    "type": "registory",
-                    "value": item.result.registory
-                };
-                var g4 = {
-                    "type": "net",
-                    "value": item.result.net
-                };
-                var g5 = {
-                    "type": "remote_thread",
-                    "value": item.result.remote_thread
-                };
-                var g6 = {
-                    "type": "file_create_time",
-                    "value": item.result.file_create_time
-                };
-                var g7 = {
-                    "type": "image_loaded",
-                    "value": item.result.image_loaded
-                };
-                var g8 = {
-                    "type": "wmi",
-                    "value": item.result.wmi
-                };
-                var g9 = {
-                    "type": "other",
-                    "value": item.result.other
-                };
-                items.push(g1);
-                items.push(g2);
-                items.push(g3);
-                items.push(g4);
-                items.push(g5);
-                items.push(g6);
-                items.push(g7);
-                items.push(g8);
-                items.push(g9);
+            var item = response.data["count"];
+            var total = 0;
+            for (let [key, value] of Object.entries(item)) {
+              items.push({
+                "type":key,
+                "value":value,
+              });
+              total+=value;
             }
-
-            if (response.data.length == 0) {
-                var g1 = {
-                    "type": "create_process",
-                    "value": 0
-                };
-                var g2 = {
-                    "type": "create_file",
-                    "value": 0
-                };
-                var g3 = {
-                    "type": "registory",
-                    "value": 0
-                };
-                var g4 = {
-                    "type": "net",
-                    "value": 0
-                };
-                var g5 = {
-                    "type": "remote_thread",
-                    "value": 0
-                };
-                var g6 = {
-                    "type": "file_create_time",
-                    "value": 0
-                };
-                var g7 = {
-                    "type": "image_loaded",
-                    "value": 0
-                };
-                var g8 = {
-                    "type": "wmi",
-                    "value": 0
-                };
-                var g9 = {
-                    "type": "other",
-                    "value": 0
-                };
-                items.push(g1);
-                items.push(g2);
-                items.push(g3);
-                items.push(g4);
-                items.push(g5);
-                items.push(g6);
-                items.push(g7);
-                items.push(g8);
-                items.push(g9);
-            }
-
+            this.total = total;
             this.data = items;
-            if (item && item.result) {
-                if (item.result.create_process != 0) {
-                    this.btnflg = true;
-                } else {
-                    this.btnflg = false;
-                }
-                var freqData = {
-                    "create_process": item.result.create_process,
-                    "create_file": item.result.create_file,
-                    "registory": item.result.registory,
-                    "net": item.result.net,
-                    "remote_thread": item.result.remote_thread,
-                    "file_create_time": item.result.file_create_time,
-                    "image_loaded": item.result.image_loaded,
-                    "wmi": item.result.wmi,
-                    "other": item.result.other
-                };
-                pie_chart('#piechart', freqData, false, 300);
+            //if (item && item.result) {
+            if (item) {
+                // if create_process exists, show correlation link
+                if (item["create_process"] != 0) this.btnflg = true;
+                else  this.btnflg = false;
+                var freqData = item;
+                pie_chart('#piechart', freqData, false, 400);
             }
         });
     })
 
+// process list
 uiModules
     .get('app/sysmon_search_visual/process_list', [])
     .controller('process_listController', function($scope, $route, $http, $interval) {
         // Set Language Data
         $scope.lang = gLangData;
-        var url = '../api/sysmon-search-plugin/process_list/' + $route.current.params.hostname + '/' + $route.current.params.eventtype + '/' + $route.current.params.date;
+        var params = $route.current.params;
+        var url = '../api/sysmon-search-plugin/process_list/' + params.hostname + '/' + params.eventtype + '/' + params.date;
         var localdata;
         $http.get(url).then((response) => {
-            this.hostname = $route.current.params.hostname;
+            this.hostname = params.hostname;
 
-            if ($route.current.params.date.length === 23) {
-                var range_datetime = get_range_datetime($route.current.params.date);
+            if (params.date.length === 23) {
+                var range_datetime = get_range_datetime(params.date);
                 this.date = range_datetime["start_date"] + "～" + range_datetime["end_date"];
             } else {
-                this.date = $route.current.params.date;
+                this.date = params.date;
             }
 
             this.data = response.data;
@@ -582,20 +367,22 @@ uiModules
         };
 
         this.isTarget = function(id){
-            if($route.current.params._id == id){
-                return true;
-            }else{
-                return false;
-            }
+            if ($route.current.params._id == id) return true;
+            else return false;
         }
 
     })
 
+// correlation
 uiModules
     .get('app/sysmon_search_visual/process', [])
     .controller('processController', function($scope, $route, $http, $interval) {
         // Set Language Data
         $scope.lang = gLangData;
+
+        var params = $route.current.params;
+        var url = '../api/sysmon-search-plugin/process/' + params.hostname + '/' + params.date;
+        var localdata;
 
         $scope.submit = function() {
             var start_str = $route.current.params.date+"T00:00:00";
@@ -612,7 +399,7 @@ uiModules
             var start_utc = start_data_obj.getTime();
             var end_utc = end_data_obj.getTime();
 			
-            var url = '../api/sysmon-search-plugin/process/' + $route.current.params.hostname + '/' + $route.current.params.date;
+            //var url = '../api/sysmon-search-plugin/process/' + $route.current.params.hostname + '/' + $route.current.params.date;
             url += '?';
             url += 'start_time='+start_utc;
             url += '&';
@@ -623,10 +410,9 @@ uiModules
             });
         };
 
-        var url = '../api/sysmon-search-plugin/process/' + $route.current.params.hostname + '/' + $route.current.params.date;
-        var localdata;
         $http.get(url).then((response) => {
-            this.hostname = $route.current.params.hostname;
+            //this.hostname = $route.current.params.hostname;
+            this.hostname = params.hostname;
 
             if ($route.current.params.date.length === 23) {
                 var range_datetime = get_range_datetime($route.current.params.date);
@@ -640,6 +426,7 @@ uiModules
             create_network(top, null, null, true);
         });
 
+        //function create_network(tops, keyword, hash, firstflg) {
         function create_network(tops, keyword, hash, firstflg) {
             function sub_create_network(top, keyword, hash) {
                 function add_child_info(cur) {
@@ -804,19 +591,29 @@ uiModules
                             type: 'continuous',
                             roundness: 0
                         }
+                    },
+                    layout: {
+                        improvedLayout:true
+                    },
+                    interaction: {
+                        navigationButtons: true,
+                        keyboard: true
                     }
                 };
                 // console.log( data );
 
                 var network = new vis_network.Network(container, data, options);
 
-                network.on("oncontext", function(properties) {
+                //network.on("oncontext", function(properties) {
+                network.on("click", function(properties) {
                     var nodeid = network.getNodeAt(properties.pointer.DOM);
                     if (nodeid) {
                         network.selectNodes([nodeid], true);
                         var node = this.body.data.nodes.get(nodeid);
                         if (node && node.info) {
-                            const veiw_data_1 = ["CurrentDirectory", "CommandLine", "Hashes", "ParentProcessGuid", "ParentCommandLine", "ProcessGuid"];
+                            const veiw_data_1 = [
+                                "CurrentDirectory", "CommandLine", "Hashes", "ParentProcessGuid", "ParentCommandLine", "ProcessGuid"
+                            ];
                             var str = "";
                             var alert_str = "";
                             for (var key in node.info) {
@@ -831,7 +628,7 @@ uiModules
                                 }
                             }
                             $("#text").val(str);
-                            alert(alert_str);
+                            //alert(alert_str);
                         }
                     }
                 });
@@ -842,7 +639,8 @@ uiModules
                     var node = this.body.data.nodes.get(properties.nodes[0]);
                     console.log(node);
                     if(node.guid != null && node.guid!="" && node.guid!="root"){
-                        var url = 'sysmon_search_visual#/process_overview/' + $route.current.params.hostname + '/' + $route.current.params.date.substr(0, 10) + '/' + node.guid;
+                        //var url = 'sysmon_search_visual#/process_overview/' + $route.current.params.hostname + '/' + $route.current.params.date.substr(0, 10) + '/' + node.guid;
+                        var url = 'sysmon_search_visual#/process_overview/' + params.hostname + '/' + params.date.substr(0, 10) + '/' + node.guid;
                         console.log(url);
                         window.open(url, "_blank");
                     }
@@ -902,14 +700,14 @@ uiModules
         // Set Language Data
         $scope.lang = gLangData;
 
-        var url = '../api/sysmon-search-plugin/process_overview/' + $route.current.params.hostname + '/' + $route.current.params.date + '/' + $route.current.params.guid;
-        console.log(url);
+        var params = $route.current.params;
+        var url = '../api/sysmon-search-plugin/process_overview/' + params.hostname + '/' + params.date + '/' + params.guid;
 
         var localdata;
-
         $http.get(url).then((response) => {
-            this.hostname = $route.current.params.hostname;
-            this.date = $route.current.params.date;
+            this.hostname = params.hostname;
+            this.date = params.date;
+            this.guid = params.guid;
             var top = response.data;
             localdata = response.data;
             if(top && top != ""){
@@ -1301,13 +1099,19 @@ uiModules
                     hierarchical: {
                         direction: 'LR',
                         sortMethod: 'directed'
-                    }
+                    },
+                    improvedLayout:true
+                },
+                interaction: {
+                    navigationButtons: true,
+                    keyboard: true
                 }
             };
             // console.log( data );
             var network = new vis_network.Network(container, data, options);
 
-            network.on("oncontext", function(properties) {
+            //network.on("oncontext", function(properties) {
+            network.on("click", function(properties) {
                 var nodeid = network.getNodeAt(properties.pointer.DOM);
 
                 if (nodeid) {
@@ -1361,7 +1165,7 @@ uiModules
                             }
                         }
                         $("#text").val(str);
-                        alert(alert_str);
+                        //alert(alert_str);
                     }
                 }
             });
@@ -1375,7 +1179,9 @@ uiModules
                     if(node._id != null){
                         _id = node._id;
                     }
-                    var url = 'sysmon_search_visual#/process_detail/' + $route.current.params.hostname + '/' + $route.current.params.date + '/' + node.guid + '/' + _id;
+                    var params = $route.current.params;
+                    //var url = 'sysmon_search_visual#/process_detail/' + $route.current.params.hostname + '/' + $route.current.params.date + '/' + node.guid + '/' + _id;
+                    var url = 'sysmon_search_visual#/process_detail/' + params.hostname + '/' + params.date + '/' + node.guid + '/' + _id;
                     window.open(url, "_blank");
                 }
             });
@@ -1424,13 +1230,13 @@ uiModules
     .controller('process_detailController', function($scope, $route, $http, $interval) {
         // Set Language Data
         $scope.lang = gLangData;
-
-        var url = '../api/sysmon-search-plugin/process_detail/' + $route.current.params.hostname + '/' + $route.current.params.date + '/' + $route.current.params.guid;
+        var params = $route.current.params;
+        var url = '../api/sysmon-search-plugin/process_detail/' + params.hostname + '/' + params.date + '/' + params.guid;
 
         var localdata;
         $http.get(url).then((response) => {
-            this.hostname = $route.current.params.hostname;
-            this.date = $route.current.params.date;
+            this.hostname = params.hostname;
+            this.date = params.date;
             this.data = response.data;
             if (response.data.length > 0 && response.data[0].process != null) {
                 this.image = response.data[0].process
@@ -1488,9 +1294,11 @@ uiModules
 
         self.rules = [];
 
-        period_list.push(getOptiion(new Date(), 1, "month"));
-
         var startdate = getStartDate(new Date(), 1);
+
+        //period_list.push(getOptiion(new Date(), 1, "month"));
+        period_list.push(getOptiion(startdate, 1, "month"));
+
         period_list.push(getOptiion(startdate, 1, "day"));
         for (var i = 0; i < (options_num - 1); i++) {
             period_list.push(getOptiion(now, day_interval, "day"));
@@ -1506,7 +1314,8 @@ uiModules
         search(data);
 
         function search(data) {
-            $http.post('../api/sysmon-search-plugin/alert_data', data).then((response) => {
+            $http.post('../api/sysmon-search-plugin/alert_data', data)
+            .then((response) => {
                 var tabledatas = [];
                 var tabledata_r = response.data.table_data;
                 var search_data = response.data.hits;
@@ -1546,10 +1355,12 @@ uiModules
                     }
                 }
 
-                $http.get('../api/sysmon-search-plugin/get_alert_rule_file_list').then((response) => {
+                $http.get('../api/sysmon-search-plugin/get_alert_rule_file_list')
+                .then((response) => {
                     var file_list = response.data;
                     var rules_arr = [];
                     var rules_list = {};
+                    
                     for (var i = 0; i < rules.length; i++) {
                         var rule_str;
                         var rule_str_f;
@@ -1667,84 +1478,90 @@ uiModules
     })
 
 uiModules
-    .get('app/sysmon_search_visual/search', [])
-
-    .directive('fileModel', function() {
-        return {
-            restrict: 'A',
-            link: function(scope, element, attrs) {
-                element.bind('change', function() {
-                    scope.ctrl.import_stixioc(element[0].files[0]);
-                    $("#file-import").val("");
-                });
-            }
-        };
-    })
-
-    .controller('searchController', function($compile, $scope, $route, $http, $interval) {
-        // Set Language Data
-        $scope.lang = gLangData;
-
-        $scope.conjunctionList = [{
-                "id": 1,
-                "name": "AND"
-            },
-            {
-                "id": 2,
-                "name": "OR"
-            }
-        ];
-        var form_count = 2;
-        // $scope["keywords.search_conjunction"] = $scope.conjunctionList[0].id;
-
-        var search_keyword = null;
-
-        this.search = function(keywords) {
-            if (typeof keywords !== "undefined") {
-                if ("start_date" in keywords && typeof keywords.start_date !== "undefined" && keywords.start_date !== null &&
-                    $("input[name='start_time']").val() !== "undefined" && $("input[name='start_time']").val() !== null && $("input[name='start_time']").val() !== "") {
-
-//                    keywords.fm_start_date = formatDate(new Date(keywords.start_date), new Date(keywords.start_time));
-                    keywords.fm_start_date = formatDate(new Date(keywords.start_date), $("input[name='start_time']").val());
-                } else {
-                    delete keywords["fm_start_date"];
-                }
-                if ("end_date" in keywords && typeof keywords.end_date !== "undefined" && keywords.end_date !== null &&
-                    $("input[name='end_time']").val() !== "undefined" && $("input[name='end_time']").val() !== null && $("input[name='end_time']").val() !== "") {
-
-//                    keywords.fm_end_date = formatDate(new Date(keywords.end_date), new Date(keywords.end_time));
-                    keywords.fm_end_date = formatDate(new Date(keywords.end_date), $("input[name='end_time']").val());
-                } else {
-                    delete keywords["fm_end_date"];
-                }
-            } else {
-                keywords = {};
-            }
-
-            keywords.sort_item = 'event_id';
-            keywords.sort_order = 'asc';
-
-            var tmp = {};
-            for(var key in keywords){
-                tmp[key] = keywords[key];
-            }
-            search_keyword = tmp;
-
-            $http.post('../api/sysmon-search-plugin/sm_search', keywords).then((response) => {
-                this.search_data = response.data.hits;
-                this.total = response.data.total;
-                orderMarkSet(this, keywords.sort_item, keywords.sort_order);
-
-                $http.post('../api/sysmon-search-plugin/sm_unique_hosts', keywords).then((response) => {
-                    this.unique_host_count = response.data.length;
-                    console.log(response.data);
-                });
+.get('app/sysmon_search_visual/search', [])
+.directive('fileModel', function() {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            element.bind('change', function() {
+                scope.ctrl.import_stixioc(element[0].files[0]);
+                $("#file-import").val("");
             });
-        };
+        }
+    };
+})
+.controller('searchController', function($compile, $scope, $route, $http, $interval) {
+    // Set Language Data
+    $scope.lang = gLangData;
 
-        this.import = function() {
-            $("#file-import").click();
-        };
+    $scope.conjunctionList = [
+        {"id": 1, "name": "AND"},
+        {"id": 2, "name": "OR"}
+    ];
+    var form_count = 2;
+    // $scope["keywords.search_conjunction"] = $scope.conjunctionList[0].id;
+
+    var search_keyword = null;
+
+    this.search = function(keywords) {
+        if (typeof keywords !== "undefined") {
+            if ("start_date" in keywords
+                && typeof keywords.start_date !== "undefined"
+                && keywords.start_date !== null
+                && $("input[name='start_time']").val() !== "undefined"
+                && $("input[name='start_time']").val() !== null
+                && $("input[name='start_time']").val() !== "")
+            {
+              //keywords.fm_start_date = formatDate(new Date(keywords.start_date), new Date(keywords.start_time));
+              keywords.fm_start_date = formatDate(
+                new Date(keywords.start_date), $("input[name='start_time']").val()
+              );
+            } else {
+              delete keywords["fm_start_date"];
+            }
+            if ("end_date" in keywords
+              && typeof keywords.end_date !== "undefined"
+              && keywords.end_date !== null
+              && $("input[name='end_time']").val() !== "undefined"
+              && $("input[name='end_time']").val() !== null
+              && $("input[name='end_time']").val() !== "")
+            {
+              //keywords.fm_end_date = formatDate(new Date(keywords.end_date), new Date(keywords.end_time));
+              keywords.fm_end_date = formatDate(
+                new Date(keywords.end_date), $("input[name='end_time']").val()
+              );
+            } else {
+              delete keywords["fm_end_date"];
+            }
+        } else {
+          keywords = {};
+        }
+
+        keywords.sort_item = 'winlog.event_id';
+        keywords.sort_order = 'asc';
+
+        var tmp = {};
+        for(var key in keywords){
+            tmp[key] = keywords[key];
+        }
+        search_keyword = tmp;
+
+        $http.post('../api/sysmon-search-plugin/sm_search', keywords)
+        .then((response) => {
+            this.search_data = response.data.hits;
+            this.total = `${response.data.total.relation} ${response.data.total.value}`;
+            orderMarkSet(this, keywords.sort_item, keywords.sort_order);
+
+            $http.post('../api/sysmon-search-plugin/sm_unique_hosts', keywords)
+            .then((response) => {
+                this.unique_host_count = response.data.length;
+            });
+        });
+    };
+
+    this.import = function() {
+        $("#file-import").click();
+    };
 
         this.import_stixioc = function(file) {
             const msg_confirm_import = $scope.lang["SEARCH_MSG_CONFIRM_IMPORT"];
@@ -1776,6 +1593,7 @@ uiModules
 
                 for (var i = 0; i < fields.length; i++) {
                     var field = fields[i];
+                    console.log(field);
                     var sel_val = sel_option_map[field.key];
 
                     var new_index = 1;
@@ -1813,24 +1631,28 @@ uiModules
                             contenttype: contenttype,
                             part_url: url
                         };
-                        //console.log("params:", params);
+                        console.log("params:", params);
 
                         $http.post("../api/sysmon-search-plugin/import_search_keywords", params)
                             .then(function successCallback(response) {
                                 const util = require('util');
-//                                console.log(util.inspect(response));
+                                //console.log(util.inspect(response));
                                 function is_value_exist(dict, key) {
                                     return (key in dict && dict.key !== "undefined" && dict.key !== null);
                                 };
 
-                                var res = response.data;
-                                if (is_value_exist(res, "data")) {
-                                    var json_data = JSON.parse(res.data);
+                                var res = response;
+                                
+                                if(res.data){
+                                    console.log(res.data);
+                                    //var json_data = JSON.parse(res.data);
+                                    var json_data = res.data;
                                     if (res.status !== 200) {
                                         console.log(util.inspect(json_data));
                                         alert(msg_failed_import_process);
                                     } else if (is_value_exist(json_data, "fields") &&
                                         Array.isArray(json_data.fields) && json_data.fields.length > 0) {
+                                        //console.log(util.inspect(json_data));
                                         set_search_criteria(json_data.fields);
                                     } else {
                                         alert(msg_no_search_criteria);
@@ -2023,7 +1845,8 @@ uiModules
 
                 $http.post('../api/sysmon-search-plugin/sm_search', keywords).then((response) => {
                     this.search_data = response.data.hits;
-                    this.total = response.data.total;
+                    //this.total = response.data.total;
+                    this.total = `${response.data.total.relation} ${response.data.total.value}`;
                     orderMarkSet(this, keywords.sort_item, keywords.sort_order);
                 });
             }
@@ -2148,17 +1971,18 @@ uiModules
             make_chart(data);
         };
 
-
-
     })
 
-function crear_graph(id) {
-    d3.select(id).selectAll("svg").remove();
-    d3.select(id).selectAll("table").remove();
-}
+//function clear_graph(id) {
+//    d3.select(id).selectAll("svg").remove();
+//    d3.select(id).selectAll("table").remove();
+//}
 
 function make_histset(id, desc_data_p, asc_data_p, count, labelkey, valuekey, process_flg, lang) {
-    crear_graph(id);
+    //clear_graph(id);
+    d3.select(id).selectAll("svg").remove();
+    d3.select(id).selectAll("table").remove();
+
     var desc_data = getViewData(desc_data_p,count,labelkey,valuekey);
     var asc_data = getViewData(asc_data_p,count,labelkey,valuekey);
     var max_desc = d3.max(desc_data, function(d) {
@@ -2173,10 +1997,23 @@ function make_histset(id, desc_data_p, asc_data_p, count, labelkey, valuekey, pr
 
 function pie_chart(id, fData, legFlg, r) {
     function segColor(c) {
-        var color = ["#87CEFA", "#FFDEAD", "#7B68EE", "#8FBC8F", "#FF3366", "#33FFFF","#666699","#00FA9A","#FF00FF"];
-        var pointer = c % 9;
+        var color = [
+            "#87CEFA",
+            "#FFDEAD",
+            "#7B68EE",
+            "#8FBC8F",
+            "#FF3366",
+            "#33FFFF",
+            "#666699",
+            "#00FA9A",
+            "#FF00FF",
+            "#FFA500",
+            //"#6B8E23",
+        ];
+        var pointer = c % 10;
         return color[pointer];
     }
+    //var color = d3.scaleOrdinal(d3.schemePaired);
 
     function pieChart(pD) {
         var pC = {},
@@ -2190,9 +2027,11 @@ function pie_chart(id, fData, legFlg, r) {
             .attr("width", pieDim.w).attr("height", pieDim.h).append("g")
             .attr("transform", "translate(" + pieDim.w / 2 + "," + pieDim.h / 2 + ")");
 
-        var arc = d3.svg.arc().outerRadius(pieDim.r - 10).innerRadius(0);
+        //var arc = d3.svg.arc().outerRadius(pieDim.r - 10).innerRadius(0);
+        var arc = d3.arc().outerRadius(pieDim.r - 10).innerRadius(0);
 
-        var pie = d3.layout.pie().sort(null).value(function(d) {
+        //var pie = d3.layout.pie().sort(null).value(function(d) {
+        var pie = d3.pie().sort(null).value(function(d) {
             return d.freq;
         });
 
@@ -2202,6 +2041,7 @@ function pie_chart(id, fData, legFlg, r) {
             })
             .style("fill", function(d, i) {
                 return segColor(i);
+                //return color(i);
             })
 
         return pC;
@@ -2218,16 +2058,19 @@ function pie_chart(id, fData, legFlg, r) {
             .attr("width", '16').attr("height", '16')
             .attr("fill", function(d, i) {
                 return segColor(i);
+                //return color(i);
             });
 
         tr.append("td").text(function(d) {
             return d.type;
         });
 
+        /*
         tr.append("td").attr("class", 'legendFreq')
             .text(function(d) {
                 return d3.format(",")(d.freq);
             });
+        */
 
         tr.append("td").attr("class", 'legendPerc')
             .text(function(d) {
@@ -2235,7 +2078,7 @@ function pie_chart(id, fData, legFlg, r) {
             });
 
         function getLegend(d, aD) {
-            return d3.format("%")(d.freq / d3.sum(aD.map(function(v) {
+            return d3.format(".0%")(d.freq / d3.sum(aD.map(function(v) {
                 return v.freq;
             })));
         }
@@ -2253,26 +2096,26 @@ function pie_chart(id, fData, legFlg, r) {
         };
     });
 
-    crear_graph(id);
+    //clear_graph(id);
+    d3.select(id).selectAll("svg").remove();
+    d3.select(id).selectAll("table").remove();
 
     var pC = pieChart(tF);
-    if (legFlg) {
-        var leg = legend(tF);
-    }
+    if (legFlg) var leg = legend(tF);
+
 }
 
 function histoGram(id, fD, max, title, process_flg) {
-    if (max < 10) {
-        max = 10;
-    }
+    if (max < 10) max = 10;
+
     var hG = {},
         hGDim = {
             t: 20,
-            r: 150,
+            r: 200,
             b: 20,
             l: 0
         };
-    hGDim.w = 320 - hGDim.l - hGDim.r,
+        hGDim.w = 200//320 - hGDim.l - hGDim.r,
         hGDim.h = 220 - hGDim.t - hGDim.b;
 
     var hGsvg = d3.select(id).append("svg")
@@ -2280,20 +2123,28 @@ function histoGram(id, fD, max, title, process_flg) {
         .attr("height", hGDim.h + hGDim.t + hGDim.b).append("g")
         .attr("transform", "translate(" + hGDim.l + "," + hGDim.t + ")");
 
-    var x = d3.scale.linear().range([0, hGDim.w])
+    //var x = d3.scale.linear().range([0, hGDim.w])
+    var x = d3.scaleLinear().range([0, hGDim.w])
         .domain([0, max]);
 
     hGsvg.append("g").attr("class", "x axis")
         .attr("transform", "translate(" + hGDim.r + "," + hGDim.h + ")")
-        .call(d3.svg.axis().scale(x).orient("bottom").ticks(4));
+        .call(d3.axisBottom(x).tickSizeInner(4))
+        .style("font-size", 9);
+        //.call(d3.svg.axis().scale(x).orient("bottom").ticks(4));
 
-    var y = d3.scale.ordinal().rangeRoundBands([0, hGDim.h], 0.1)
+    //var y = d3.scale.ordinal().rangeRoundBands([0, hGDim.h], 0.1)
+    var y = d3.scaleBand().rangeRound([0, hGDim.h])
+        .padding(0.1)
         .domain(fD.map(function(d) {
             return d[0];
         }));
 
     var bars = hGsvg.selectAll(".bar").data(fD).enter()
         .append("g").attr("class", "bar");
+
+    //var yBand = y.rangeBand();
+    var yBand = y.bandwidth();
 
     bars.append("rect")
         .attr("x", function(d) {
@@ -2302,7 +2153,7 @@ function histoGram(id, fD, max, title, process_flg) {
         .attr("y", function(d) {
             return y(d[0]);
         })
-        .attr("height", y.rangeBand())
+        .attr("height", yBand)
         .attr("width", function(d) {
             return x(d[1]);
         })
@@ -2321,11 +2172,12 @@ function histoGram(id, fD, max, title, process_flg) {
             }
         })
         .attr("y", function(d) {
-            return y(d[0]) + y.rangeBand() / 2;
+            return y(d[0]) + yBand// / 2;
         })
         .attr("x", function(d) {
             return 10;
         })
+        .style("font-size", 14)
         .attr("text-anchor", "left");
 
     bars.append("text").text(title)
@@ -2336,7 +2188,6 @@ function histoGram(id, fD, max, title, process_flg) {
             return 10;
         })
         .attr("text-anchor", "left");
-
 
     return hG;
 }
@@ -2418,12 +2269,6 @@ function formatDate(date, time) {
     return y + '-' + m + '-' + d + 'T' + time + ':00Z';
 }
 
-function formatDate2(date) {
-    var d = ("0" + date.getDate()).slice(-2);
-    var m = ("0" + (date.getMonth() + 1)).slice(-2);
-    var y = date.getFullYear();
-    return y + '-' + m + '-' + d + 'T00:00:00Z';
-}
 
 function get_range_datetime(date) {
     var date_str = date.substr(0, 10)+"T"+date.substr(11, 12)+"Z";
@@ -2516,15 +2361,10 @@ function getOptiion(lt_date, interval, type) {
     return str_gte + "～" + str_lt;
 }
 
-function padding(n, d, p) {
-    p = p || '0';
-    return (p.repeat(d) + n).slice(-d);
-};
-
 function getViewFormat(date, type) {
     if (type == 1) {
         return padding(date.getFullYear(), 4, "0") + "/" + padding(date.getMonth() + 1, 2, "0") + "/" + padding(date.getDate(), 2, "0") + "/00:00:00";
-    } else {
+    } else if (type == 2) {
         return padding(date.getFullYear(), 4, "0") + "-" + padding(date.getMonth() + 1, 2, "0") + "-" + padding(date.getDate(), 2, "0");
     }
 
@@ -2553,23 +2393,6 @@ function getPastDate(date, interval, type) {
     return date;
 }
 
-function getFutureDate(date, interval, type) {
-    if (type == "month") {
-        var month = date.getMonth();
-        date.setMonth(date.getMonth() + interval);
-        var diff = date.getMonth()-month;
-        if(diff<0){
-            diff = diff + 12;
-        }
-        if(diff!=interval){
-            date.setDate(1);
-            date.setDate(date.getDate() - 1);
-        }
-    } else {
-        date.setDate(date.getDate() + interval);
-    }
-    return date;
-}
 
 function getDateQuery(str) {
     var query = {};
@@ -2587,10 +2410,6 @@ function getDateQueryFromDate(date1, date2) {
     return query;
 }
 
-function getDateBeggining(date) {
-    date.setDate(1);
-    return date;
-}
 
 function insertStr(str, index, insert) {
     return str.slice(0, index) + insert + str.slice(index, str.length);
@@ -2609,6 +2428,7 @@ function new_line(str){
 
     return str;
 }
+
 
 
 // -------------------------------------------------------

@@ -6,40 +6,19 @@
 
   <style type="text/css">
     #mynetwork {
-      width: 1200px;
-      height: 800px;
+      width: 1280px;
+      height: 720px;
       border: 1px solid lightgray;
     }
-	table th,td {
-	  padding: 10px;
-	}
-	.button {
-    padding: 10px;
-    background: #54c3a5;
-    color: #fff;
-    font-weight: bold;
-    line-height: 1.5em;
-    letter-spacing: 0.15em;
-    border-radius: 4px;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    -o-border-radius: 4px;
-    text-align: center;
-    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.29);
-	border: none;
-	}
-	.button:hover {
-    opacity: 0.7;
-    cursor: pointer;
-	}
   </style>
-    <script src="../plugins/sysmon_search_visual/dist/d3.v3.min.js"> </script>
+  <link rel="stylesheet" type="text/css" href="../plugins/sysmon_search_visual/dist/vis-network.min.css">
+  <script src="../plugins/sysmon_search_visual/dist/d3.v5.min.js"> </script>
 </head>
 <body>
 <div ng-cloak>
-<div id="header">
+<!--div id="header">
 <h1 class="h1_logo">SysmonSearch</h1>
-</div>
+</div-->
 <div class="global_Nav">
 <ul id="menu" class="clearfix">
   <li>
@@ -57,9 +36,21 @@
 </ul>
 </div>
 <div class="main">
+  <!--
 <h2>{{ lang["CORRELATION_H2"] }}</h2>
 <h2>{{ lang["TARGET_HOSTNAME"] }}:{{ctrl.hostname}}</h2>
-<h2>{{ lang["TARGET_DATE"] }}:{{ctrl.date}}</h2>
+<h2>{{ lang["TARGET_DATE"] }}:{{ctrl.date}}</h2>    
+  -->
+
+<div>
+  <table >
+    <tr>
+      <th>{{ lang["CORRELATION_H2"] }} </th><td></td>
+      <th>{{ lang["TARGET_HOSTNAME"] }}</th><td>{{ctrl.hostname}}</td>
+      <th>{{ lang["TARGET_DATE"] }}</th><td>{{ctrl.date}}</td>
+    </tr>
+  </table> 
+</div>
 
 <div class="search_Box">
   
@@ -67,8 +58,8 @@
 <img src="../plugins/sysmon_search_visual/images/search_icon.png" alt="search_icon" width="21" height="20">
 <label>{{ lang["SEARCHBOX_SEARCH"] }}:</label>
 </div>
-<div class="search_Box_main">
 
+<div class="search_Box_main">
 <form ng-submit="submit()" ng-controller="processController">
 <table class="">
   <tbody>
@@ -93,21 +84,24 @@
 </table>
 </form>
 
-
 <label>
-  <input name="keyword" ng-model="keyword" placeholder="キーワード" class="search_keyword ng-pristine ng-untouched ng-valid ng-empty" ng-keyup="$event.keyCode == 13 ? ctrl.onkeyup(keyword,hash) : null" type="text">
+  <input name="keyword" ng-model="keyword" placeholder="keyword" class="search_keyword ng-pristine ng-untouched ng-valid ng-empty" ng-keyup="$event.keyCode == 13 ? ctrl.onkeyup(keyword,hash) : null" type="text">
 </label>
 <label>
   <input name="hash" ng-model="hash" placeholder="HASH" class="search_hash ng-pristine ng-untouched ng-valid ng-empty" ng-keyup="$event.keyCode == 13 ? ctrl.onkeyup(keyword,hash) : null" type="text">
 </label>
+
 </div>
 </div>
 
+<div >
+<p><textarea rows="10" cols="80" id="text" readonly placeholder="{{lang.TEXTAREA_PLACEHOLDER}}">
+  </textarea></p>
+</div>
+  
 <div id="mynetwork"></div>
 <div id="pos" style="position:absolute; display:none;">test</div>
 </div>
-<p><textarea rows="10" cols="100" id="text" class="detail" readonly placeholder="{{lang.TEXTAREA_PLACEHOLDER}}">
-</textarea></p>
 </div>
 </body>
 </html>

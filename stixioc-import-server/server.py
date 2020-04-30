@@ -20,6 +20,7 @@ logger = logging.getLogger('stixioc-import-server.' + __name__)
 # Original Option Setting - server setting
 define("port",     default=8000, help="run on the given port", type=int)
 define("debug",    default=False, help="run in debug mode")
+define("addr",     default="localhost", help="run on the given address", type=str)
 
 # Original Option Setting - API setting
 define("addforce", default=True)
@@ -67,7 +68,8 @@ if __name__ == "__main__":
 
     # Tornado Service Start
     try:
-        application.listen(options.port)
+        #application.listen(options.port, "0.0.0.0")
+        application.listen(options.port, options.addr)
         tornado.ioloop.IOLoop.instance().start()
     except KeyboardInterrupt:
         tornado.ioloop.IOLoop.instance().stop()

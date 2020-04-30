@@ -1,14 +1,23 @@
 version: '2.2'
 services:
   elasticsearch:
-    build: es
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.0
     volumes:
-      - es-data:/usr/share/elasticsearch/data
+      - ./es/es-data:/usr/share/elasticsearch/data
+      #- ./es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     container_name: docker-sysmonsearch-es
     environment:
-      - cluster.name=docker-cluster
+      #- cluster.name=docker-cluster
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - node.name=node-1
+      - network.host=0.0.0.0
+      - http.port=9200
+      - cluster.initial_master_nodes=["node-1"]
+      - xpack.ml.enabled=false
+      - xpack.security.enabled=false
+      - xpack.security.transport.ssl.enabled=true
+      - xpack.security.audit.enabled=true
     ports:
         - 9200:9200
     expose:
@@ -21,33 +30,33 @@ services:
         soft: 65536
         hard: 65536
   kibana:
-    build:
-      context: kibana
-#      args:
-#        - http_proxy=[proxy_server_URL]
-#        - https_proxy=[proxy_server_URL]
-    #volumes:
-    #  - rule_files:/usr/share/kibana/rule_files
+    #image: docker.elastic.co/kibana/kibana-oss:7.6.0
+    image: docker.elastic.co/kibana/kibana:7.6.0
+    volumes:
+      - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+      - ../sysmon_search_plugin:/usr/share/kibana/plugins/sysmon_search_plugin
+      - ../sysmon_search_r:/usr/share/kibana/plugins/sysmon_search_r
+      - ./kibana/conf.js:/usr/share/kibana/plugins/sysmon_search_plugin/conf.js
+      - ./kibana/conf.js:/usr/share/kibana/plugins/sysmon_search_r/conf.js
+      - ./rule_files:/tmp/rule_files
     container_name: docker-sysmonsearch-kibana
     ports:
       - 5601:5601
-
   stixioc-import-server:
     build:
       context: stixioc-import-server
 #      args:
 #        - http_proxy=[proxy_server_URL]
 #        - https_proxy=[proxy_server_URL]
-
-    command: bash -c "cd /root/stixioc-import-server/;python server.py"
-    #volumes:
-    #  - rule_files:/root/script/rule_files
+    command: bash -c "cd /root/stixioc-import-server/ && python server.py"
+    volumes:
+      - ../stixioc-import-server:/root/stixioc-import-server
+      - ./stixioc-import-server/server.conf:/root/stixioc-import-server/server.conf
+      - ./logs:/root/stixioc-import-server/logs
+      - ../script:/root/script
+      - ./stixioc-import-server/winlogbeat.yml:/root/script/winlogbeat.yml
+      - ./rule_files:/root/script/rule_files
     container_name: docker-stixioc-import-server
     ports:
       - 56020:56020
 
-volumes:
-  es-data:
-    driver: local
-  rule_files:
-    driver: local

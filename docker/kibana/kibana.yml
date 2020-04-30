@@ -1,0 +1,8 @@
+server.port: 5601
+server.host: "0.0.0.0"
+elasticsearch.hosts: ["http://elasticsearch:9200"]
+csp.rules:
+  - "script-src 'self' 'unsafe-eval' 'sha256-M2M+sgC2bZ4r73FO1LV5JmHiS5COwEb2Uqw7EbsHmBY='"
+ 
+elasticsearch.username: elastic
+elasticsearch.password: changeme

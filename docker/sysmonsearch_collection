@@ -1,0 +1,4 @@
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+
+0,30 * * * * docker exec -it docker-stixioc-import-server python ../script/collection_alert_data.py
+0 1  * * * * DATE=`date -d "-1 day" "+%Y.%m.%d"` ; docker exec -it docker-stixioc-import-server python ../script/collection_statistical_data.py $DATE

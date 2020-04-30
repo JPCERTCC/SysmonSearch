@@ -48,7 +48,7 @@ def _add_search_item(patterns, key, value):
     else:
         pattern = {}
         pattern["key"] = key
-        pattern["value"] = string.strip(value, "' ")
+        pattern["value"] = value #string.strip(value, "' ")
         patterns.append(pattern)
 
 
@@ -69,7 +69,9 @@ def _set_search_items_from_address_object(patterns, prop):
 
     # IPv4, IPv6
     if obj.category == "ipv4-addr" or obj.category == "ipv6-addr":
-        address = unicode(obj.address_value)
+        #address = unicode(obj.address_value)
+        address = str(obj.address_value)
+
         if address[0] == '[' and address[len(address)-1] == ']':
               
             _add_search_item(patterns, u"IpAddress", address[1:len(address)-2].split(','))
@@ -90,9 +92,9 @@ def _set_search_items_from_file_object(patterns, prop):
     if obj.hashes is not None:
         for h in obj.hashes:
             if h.fuzzy_hash_value is not None:
-                _add_search_item(patterns, u"Hash", unicode(h.fuzzy_hash_value))
+                _add_search_item(patterns, u"Hash", str(h.fuzzy_hash_value))
             elif h.simple_hash_value is not None:
-                hash = unicode(h.simple_hash_value)
+                hash = str(h.simple_hash_value)
                 if hash[0] == '[' and hash[len(hash)-1] == ']':
                     _add_search_item(patterns, u"Hash", hash[1:len(hash)-2].split(','))
                 else:
@@ -100,7 +102,7 @@ def _set_search_items_from_file_object(patterns, prop):
 
     # File Name
     if obj.file_name is not None:
-         filename = unicode(obj.file_name)
+         filename = str(obj.file_name)
          if filename[0] == '[' and filename[len(filename)-1] == ']':
              for f in filename[1:len(filename)-2].split(','):
                  file = f
@@ -133,7 +135,7 @@ def _set_search_items_from_process_object(patterns, prop):
 
     # Process
     if obj.name is not None:
-        process = unicode(obj.name)
+        process = str(obj.name)
         if process[0] == '[' and process[len(process)-1] == ']':
             _add_search_item(patterns, u"ProcessName", process[1:len(process)-2].split(','))
         else:
@@ -151,7 +153,7 @@ def _set_search_items_from_win_registry_key_object(patterns, prop):
 
     # Win Registry Key
     if obj.key is not None:
-        keyname = unicode(obj.key)
+        keyname = str(obj.key)
         if keyname[0] == '[' and keyname[len(keyname)-1] == ']':
             for key in keyname[1:len(keyname)-2].split(','):
                 if obj.hive is not None:
@@ -169,7 +171,7 @@ def _set_search_items_from_win_registry_key_object(patterns, prop):
         for value in obj.values:
             if value is not None:
                 if value.data is not None:
-                    value_data = unicode(value.data)
+                    value_data = str(value.data)
                     if value_data[0] == '[' and value_data[len(value_data)-1] == ']':
                         _add_search_item(patterns, u"RegistryValue", value_data[1:len(value_data)-2].split(','))
                     else:
@@ -187,7 +189,7 @@ def _set_search_items_from_hostname_object(patterns, prop):
 
     # Host Name
     if obj.hostname_value is not None:
-        host = unicode(obj.hostname_value)
+        host = str(obj.hostname_value)
         if host[0] == '[' and host[len(host)-1] == ']':
             _add_search_item(patterns, u"HostName", host[1:len(host)-2].split(','))
         else:
@@ -205,7 +207,8 @@ def _set_search_items_from_port_object(patterns, prop):
 
     # Port
     if obj.port_value is not None:
-        port = unicode(obj.port_value)
+        #port = unicode(obj.port_value)
+        port = str(obj.port_value)
         _add_search_item(patterns, u"Port", port)
     
 
@@ -312,7 +315,11 @@ def get_search_items(stix_package):
     pkg = stix_package
 
     if type(stix_package) == STIXPackage:
-        pkg = stix.parseString(stix_package.to_xml())
+        xml = stix_package.to_xml(encoding=None)
+        print(xml)
+        #pkg = stix.parseString(stix_package.to_xml())
+        pkg = stix.parseString(xml)
+
 
     patterns = []
 

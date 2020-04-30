@@ -1,32 +1,17 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<title>Event List</title>
-
-    <style type="text/css">
-        body, html {
-            font-family: sans-serif;
-        }
-    </style>
-	<style>
-		table.noBorder_tbl th,td {
-			padding: 10px;
-		}
-		table.noBorder_tbl th {
-			vertical-align: top;
-		}
-		.conditions_w373 {
-			width: 373px;
-		}
-	</style>
-    <script src="../plugins/sysmon_search_visual/dist/d3.v3.min.js"> </script>
+  <title>Event List</title>
+  <script src="../plugins/sysmon_search_visual/dist/d3.v5.min.js"> </script>
 </head>
 
 <body>
 <div ng-cloak>
-<div id="header">
-<h1 class="h1_logo">SysmonSearch</h1>
-</div>
+
+  <!--
+  <div id="header"><h1 class="h1_logo">SysmonSearch</h1></div>
+  -->
+  
 <div class="global_Nav">
 <ul id="menu" class="clearfix">
   <li>
@@ -50,13 +35,33 @@
 
 </div>
 
+<div class="main">
+
 <div id="visualization"></div>
 <!--
 <div class="container" ng-controller="statisticController">
 <div id="visualization"></div>
 </div>
 -->
+
+<table class="legend">
+  <thead>
+    <tr>
+      <th>{{ lang["EVENTSUMMARY_TABLE_TYPE"] }}</th>
+    </tr>
+  </thead>
+  <tbody>
+  <tr ng-repeat="day_data in ctrl.data">
+    <td title="{{lang.DATA_NAME_EVENTTYPE}}"><div class="square" id='square{{$index}}'></div>
+    <a href="sysmon_search_visual#/process_list/{{ctrl.hostname}}/{{day_data.type}}/{{ctrl.date}}/0" title="{{lang.OPEN_PROCESS}}" target="_blank" class="{{day_data.type!='other' ? 'btn-abled' : 'btn-disabled'}}">{{day_data.type}}</a></td>
+  </tr>
+	</tbody>
+</table>
+
 </div>
+
+</div>
+
 </body>
 </html>
 

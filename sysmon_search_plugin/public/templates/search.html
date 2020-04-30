@@ -1,32 +1,14 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<title>Event List</title>
-
-    <style type="text/css">
-        body, html {
-            font-family: sans-serif;
-        }
-    </style>
-
-<style>
-table.noBorder_tbl th,td {
-	padding: 10px;
-}
-table.noBorder_tbl th {
-	vertical-align: top;
-}
-.conditions_w373 {
-	width: 373px;
-}
-</style>
-<script src="../plugins/sysmon_search_visual/dist/d3.v3.min.js"> </script>
+  <title>Event List</title>
+  <script src="../plugins/sysmon_search_visual/dist/d3.v5.min.js"> </script>
 </head>
 <body>
 <div ng-cloak>
-<div id="header">
-<h1 class="h1_logo">SysmonSearch</h1>
-</div>
+<!--
+<div id="header"><h1 class="h1_logo">SysmonSearch</h1></div>
+-->
 <div class="global_Nav">
 <ul id="menu" class="clearfix">
   <li>
@@ -44,12 +26,15 @@ table.noBorder_tbl th {
 </ul>
 </div>
 <div class="main">
-<div class="ttlBox01 clearfix">
+
+<!--div class="ttlBox01 clearfix">
 <h2 class="flt_l">{{ lang["SEARCH_H2"] }}</h2>
-</div>
+</div-->
+
 <div class="detectionBox">
-<div class="db_ttl">{{ lang["SEARCH_CRITERIA_SEARCH_FIELD"] }}</div>
-    <div class="db_main clearfix">
+<!--div class="db_ttl">{{ lang["SEARCH_CRITERIA_SEARCH_FIELD"] }}</div-->
+<div class="db_ttl">Search</div>
+<div class="db_main clearfix">
     <table class="noBorder_tbl flt_l clearfix">
       <tbody>
         <tr>
@@ -96,10 +81,10 @@ table.noBorder_tbl th {
       </tbody>
     </table>
     <div class="flt_r">
-        <div class="button" ng-click="ctrl.import()">{{ lang["SEARCH_CRITERIA_IMPORT_BUTTON"] }}</div>
+        <div class="button flt_l" ng-click="ctrl.search(keywords)">{{ lang["SEARCH_CRITERIA_SEARCH_BUTTON"] }}</div>
+        <div class="button flt_l" ng-click="ctrl.save_rules(keywords)">{{ lang["SEARCH_CRITERIA_SAVE_RULE＿BUTTON1"] }} {{ lang["SEARCH_CRITERIA_SAVE_RULE＿BUTTON2"] }}</div>
+        <div class="button flt_l" ng-click="ctrl.import()">{{ lang["SEARCH_CRITERIA_IMPORT_BUTTON"] }}</div>
         <input type="file" id="file-import" style="display:none" file-model="file" />
-        <div class="button" ng-click="ctrl.save_rules(keywords)">{{ lang["SEARCH_CRITERIA_SAVE_RULE＿BUTTON1"] }}<br />{{ lang["SEARCH_CRITERIA_SAVE_RULE＿BUTTON2"] }}</div>
-        <div class="button" ng-click="ctrl.search(keywords)">{{ lang["SEARCH_CRITERIA_SEARCH_BUTTON"] }}</div>
     </div>
 
     <div ng-init="keywords = {sort_item: 'event_id', sort_order: 'asc'}"></div>
@@ -128,12 +113,12 @@ table.noBorder_tbl th {
     <table class="table">
       <thead>
         <tr>
-            <th><a ng-click="ctrl.sort('event_data.UtcTime.keyword')">UtcTime{{ctrl.utc_time}}</a></th>
-            <th><a ng-click="ctrl.sort('event_id')">EventId{{ctrl.event_id}}</a></th>
-            <th><a ng-click="ctrl.sort('level.keyword')">Level{{ctrl.level}}</a></th>
-            <th><a ng-click="ctrl.sort('computer_name.keyword')">Computer{{ctrl.computer_name}}</a></th>
-            <th><a ng-click="ctrl.sort('event_data.User.keyword')">UserName{{ctrl.user_name}}</a></th>
-            <th><a ng-click="ctrl.sort('event_data.Image.keyword')">Image{{ctrl.image}}</a></th>
+            <th style="width:20%;"><a ng-click="ctrl.sort('winlog.event_data.UtcTime')">UtcTime{{ctrl.utc_time}}</a></th>
+            <th style="width:10%;"><a ng-click="ctrl.sort('winlog.event_id')">EventId{{ctrl.event_id}}</a></th>
+            <th style="width:10%;"><a ng-click="ctrl.sort('log.level')">Level{{ctrl.level}}</a></th>
+            <th style="width:20%;"><a ng-click="ctrl.sort('winlog.computer_name')">Computer{{ctrl.computer_name}}</a></th>
+            <th style="width:10%;"><a ng-click="ctrl.sort('winlog.event_data.User')">UserName{{ctrl.user_name}}</a></th>
+            <th style="width:30%;"><a ng-click="ctrl.sort('winlog.event_data.Image')">Image{{ctrl.image}}</a></th>
         </tr>
       </thead>
       <tbody>
@@ -143,7 +128,7 @@ table.noBorder_tbl th {
           <td title="{{lang.DATA_NAME_LEVEL}}">{{data.level}}</td>
           <td title="{{lang.DATA_NAME_COMPUTER}}">
               {{data.computer_name}}<BR>
-              <a href="sysmon_search_visual#/process_list/{{data.computer_name}}/{{data.decription}}/{{data.utc_time}}/{{data._id}}" title="{{lang.OPEN_PROCESS}}" target="_blank">{{lang.RESULTBOX_LINKNAME_TABLE}}</a>
+              <a href="sysmon_search_visual#/process_list/{{data.computer_name}}/{{data.description}}/{{data.utc_time}}/{{data._id}}" title="{{lang.OPEN_PROCESS}}" target="_blank">{{lang.RESULTBOX_LINKNAME_TABLE}}</a>
               <a href="sysmon_search_visual#/process/{{data.computer_name}}/{{data.utc_time}}/{{data.process_guid ? data.process_guid : data.source_guid ? data.source_guid : 0}}" title="{{lang.OPEN_CORRELATION}}" target="_blank">{{lang.RESULTBOX_LINKNAME_GRAPH}}</a>
           </td>
           <td title="{{lang.DATA_NAME_USERNAME}}">{{data.user_name}}</td>

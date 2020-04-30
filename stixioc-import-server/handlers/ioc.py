@@ -17,7 +17,7 @@ from mixbox import idgen, namespaces
 from stix.core import STIXPackage as STIXPackage_v1
 from openioc2stix.translate import to_stix
 
-from base import BaseConvertHandler
+from .base import BaseConvertHandler
 import common
 
 class IoCConvertHandler(BaseConvertHandler):
@@ -48,8 +48,8 @@ class IoCConvertHandler(BaseConvertHandler):
                     filename, content_type = file['filename'], file['content_type']
                     body = file['body']
 
-                    gen_log.debug('POST "%s" "%s" %d bytes', filename, content_type, len(body))
-                    gen_log.debug('POST file body:\n"%s"', body)
+                    gen_log.info('POST "%s" "%s" %d bytes', filename, content_type, len(body))
+                    gen_log.info('POST file body:\n"%s"', body)
 
                     stix_package = _get_stix_package(body)
                     if stix_package is not None:
@@ -59,7 +59,8 @@ class IoCConvertHandler(BaseConvertHandler):
             self.http_normal(200, msg=msg if msg is not None else u'OK')
 
         except:
-            trace_msg = traceback.format_exc().decode('utf-8')
+            #trace_msg = traceback.format_exc().decode('utf-8')
+            trace_msg = traceback.format_exc()
             emsg = u'request_msg:{0} {1}'.format(self.request.body, trace_msg)
             gen_log.error(u',[session-id:{0}],{1}'.format(None, emsg))
             self.http_error(400, msg=trace_msg)
