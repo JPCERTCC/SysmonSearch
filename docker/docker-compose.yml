@@ -4,20 +4,12 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.6.0
     volumes:
       - ./es/es-data:/usr/share/elasticsearch/data
-      #- ./es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./es/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     container_name: docker-sysmonsearch-es
     environment:
       #- cluster.name=docker-cluster
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - node.name=node-1
-      - network.host=0.0.0.0
-      - http.port=9200
-      - cluster.initial_master_nodes=["node-1"]
-      - xpack.ml.enabled=false
-      - xpack.security.enabled=false
-      - xpack.security.transport.ssl.enabled=true
-      - xpack.security.audit.enabled=true
     ports:
         - 9200:9200
     expose:
@@ -59,4 +51,3 @@ services:
     container_name: docker-stixioc-import-server
     ports:
       - 56020:56020
-

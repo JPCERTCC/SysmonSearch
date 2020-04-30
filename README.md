@@ -21,8 +21,8 @@
 
 ## Use SysmonSearch
   To try SysmonSearch, you can either 1)install softwares to your own linux enviroment with following instractions or 2)use docker image:
-  1. [Install to your own linux box](https://github.com/JPCERTCC/SysmonSearch-Private/wiki/How-to-Install)
-  2. [Use docker image](https://github.com/JPCERTCC/SysmonSearch-Private/wiki/Jump-start-with-Docker)
+  1. [Install to your own linux box](https://github.com/JPCERTCC/SysmonSearch/wiki/Install)
+  2. [Use docker image](https://github.com/JPCERTCC/SysmonSearch/wiki/Setup-with-Docker)
 
 ## Documentation  
-For details, please check [the SysmonSearch wiki](https://github.com/JPCERTCC/SysmonSearch-Private/wiki).
+For details, please check [the SysmonSearch wiki](https://github.com/JPCERTCC/SysmonSearch/wiki).
