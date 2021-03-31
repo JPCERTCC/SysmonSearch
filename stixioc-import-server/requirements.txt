@@ -5,7 +5,7 @@ cybox==2.1.0.18
 elasticsearch==7.0.5
 elasticsearch-dsl==7.1.0
 idna==2.8
-lxml==4.4.1
+lxml==4.6.3
 mixbox==1.0.3
 openioc-to-stix==1.4.0
 ordered-set==3.1.1
