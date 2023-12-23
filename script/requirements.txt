@@ -4,7 +4,7 @@ chardet==3.0.4
 cybox==2.1.0.20
 elasticsearch==7.1.0
 idna==2.8
-lxml==4.4.2
+lxml==4.9.1
 mixbox==1.0.3
 openioc-to-stix==1.4.0
 ordered-set==3.1.1
