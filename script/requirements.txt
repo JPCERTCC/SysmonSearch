@@ -22,5 +22,5 @@ stix2-patterns==1.2.1
 stix2-slider==2.0.0
 stixmarx==1.0.6
 tornado==6.0.3
-urllib3==1.25.7
+urllib3==1.26.5
 xlrd==1.2.0
